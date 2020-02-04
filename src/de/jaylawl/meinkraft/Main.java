@@ -6,13 +6,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main extends JavaPlugin  {
 
     private static Main instance;
-    private static List<String> enabledCommands = new ArrayList<>();
+    private static int enabledCommands = 0;
     private static int enabledModules = 0;
     private static int enabledListeners = 0;
 
@@ -24,18 +21,18 @@ public class Main extends JavaPlugin  {
         PluginManager pm = getServer().getPluginManager();
         FileConfiguration config = getConfig();
 
-        if (config.getBoolean("Modules.CommandBlocker.Active", true)) {
+        if (config.getBoolean("Modules.CommandBlocker.Enabled", true)) {
             pm.registerEvents(new EvtBlockCommand(), this);
             enabledModules++;
             enabledListeners++;
         }
-        if (config.getBoolean("Modules.UnsafePlayerBlocker.Active", false)) {
+        if (config.getBoolean("Modules.UnsafePlayerBlocker.Enabled", false)) {
             pm.registerEvents(new EvtBlockPlayer(), this);
             enabledModules++;
             enabledListeners++;
         }
 
-        if (config.getBoolean("Modules.ResourcePackHandler.Active", false)) {
+        if (config.getBoolean("Modules.ResourcePackHandler.Enabled", false)) {
             pm.registerEvents(new EvtJoin(), this);
             pm.registerEvents(new EvtResourcePackStatus(), this);
             enabledModules++;
@@ -44,46 +41,46 @@ public class Main extends JavaPlugin  {
 
         if (config.getBoolean("Commands.fly", true)) {
             getCommand("fly").setExecutor(new CmdFly());
-            enabledCommands.add("/fly");
+            enabledCommands++;
         }
         if (config.getBoolean("Commands.gm", true)) {
             CmdGamemode cmdGamemode = new CmdGamemode();
             getCommand("gm").setExecutor(cmdGamemode);
             getCommand("gm").setTabCompleter(cmdGamemode);
-            enabledCommands.add("/gm");
+            enabledCommands++;
         }
         if (config.getBoolean("Commands.invsee", true)) {
             CmdInvsee cmdInvsee = new CmdInvsee();
             getCommand("invsee").setExecutor(cmdInvsee);
             getCommand("invsee").setTabCompleter(cmdInvsee);
-            enabledCommands.add("/invsee");
+            enabledCommands++;
         }
         if (config.getBoolean("Commands.ping", true)) {
             getCommand("ping").setExecutor(new CmdPing());
-            enabledCommands.add("/ping");
+            enabledCommands++;
         }
         if (config.getBoolean("Commands.speed", true)) {
             CmdSpeed cmdSpeed = new CmdSpeed();
             getCommand("speed").setExecutor(cmdSpeed);
             getCommand("speed").setTabCompleter(cmdSpeed);
-            enabledCommands.add("/speed");
+            enabledCommands++;
         }
         if (config.getBoolean("Commands.god", true)) {
             getCommand("god").setExecutor(new CmdGod());
             pm.registerEvents(new EvtGod(), this);
-            enabledCommands.add("/god");
+            enabledCommands++;
             enabledListeners++;
         }
         if (config.getBoolean("Commands.world", true)) {
             CmdWorld cmdWorld = new CmdWorld();
             getCommand("world").setExecutor(cmdWorld);
             getCommand("world").setTabCompleter(cmdWorld);
-            enabledCommands.add("/world");
+            enabledCommands++;
         }
 
-        if (enabledCommands.size() + enabledModules + enabledListeners > 0) {
+        if (enabledCommands + enabledModules + enabledListeners > 0) {
             getCommand("mk").setExecutor(new CmdMaster());
-            getLogger().info("Enabled " + enabledCommands.size() + " command(s)");
+            getLogger().info("Enabled " + enabledCommands + " command(s)");
             getLogger().info("Enabled " + enabledModules + " module(s)");
             getLogger().info("Enabled " + enabledListeners + " listener(s)");
         } else {
@@ -97,7 +94,7 @@ public class Main extends JavaPlugin  {
         return instance;
     }
 
-    public static List<String> getEnabledCommands() {
+    public static int getEnabledCommands() {
         return enabledCommands;
     }
 

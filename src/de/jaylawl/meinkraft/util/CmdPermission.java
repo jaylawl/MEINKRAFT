@@ -5,23 +5,23 @@ import org.bukkit.entity.Player;
 
 public class CmdPermission {
 
-    public static boolean hasAny(CommandSender sender, String node) {
+    public static boolean hasAny(CommandSender sender, String cmd) {
         if (
                 sender instanceof Player &&
                 !sender.hasPermission("mk.admin") &&
                 !sender.isOp()
         ) {
-            return hasSelf(sender, node) || hasOthers(sender, node);
+            return hasSelf(sender, cmd) || hasOthers(sender, cmd);
         }
         return true;
     }
 
-    public static boolean hasSelf(CommandSender sender, String node) {
-        return sender.hasPermission("mk." + node);
+    public static boolean hasSelf(CommandSender sender, String cmd) {
+        return sender.hasPermission("mk." + cmd + ".self");
     }
 
-    public static boolean hasOthers(CommandSender sender, String node) {
-        return sender.hasPermission("mk." + node + ".others");
+    public static boolean hasOthers(CommandSender sender, String cmd) {
+        return sender.hasPermission("mk." + cmd);
     }
 
 }

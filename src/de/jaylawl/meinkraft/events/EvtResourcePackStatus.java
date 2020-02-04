@@ -1,7 +1,6 @@
 package de.jaylawl.meinkraft.events;
 
 import de.jaylawl.meinkraft.Main;
-import de.jaylawl.meinkraft.util.Messaging;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -29,24 +28,20 @@ public class EvtResourcePackStatus implements Listener {
                 event.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED &&
                 config.getBoolean(mn + "KickOnDecline", true)
         ) {
-            System.out.println("KICK DECLINE");
             kick = true;
         } else if (
                 event.getStatus() == PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD &&
                 config.getBoolean(mn + "KickOnFailure", true)
         ) {
-            System.out.println("KICK FAILURE");
             kick = true;
         }
 
         if (kick) {
             if (p.isOp() && config.getBoolean(mn + "WhitelistOperators", false)) {
-                System.out.println("PLAYER IS OP");
                 return;
             }
             for (String whitelistedUUID : config.getStringList(mn + "WhitelistedUUIDs")) {
                 if (whitelistedUUID.equals(p.getUniqueId().toString())) {
-                    System.out.println("PLAYER IS WHITELISTED");
                     return;
                 }
             }

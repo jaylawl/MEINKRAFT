@@ -1,9 +1,9 @@
 main: de.jaylawl.meinkraft.Main
 name: MEINKRAFT
-version: 0.dev8
+version: 1.0.1
 api-version: "1.14"
 author: jaylawl
-description: Lightweight library of essential commands
+description: Lightweight library of admin tools
 commands:
   mk:
     description: Master command

@@ -51,6 +51,21 @@ public class HelpBook {
                         .create()
         );
 
+        b.addPage(
+                "§lColor code chart§r\n\n" +
+                        "&0 §0BLACK§r | &1 §1BLUE§r\n" +
+                        "&2 §2GREEN§r | &3 §3CYAN§r\n" +
+                        "&4 §4RED§r | &5 §5PURPLE§r\n" +
+                        "&6 §6ORANGE§r | &7 §7L.GRAY§r\n" +
+                        "&8 §8GRAY§r | &9 §9L.BLUE§r\n" +
+                        "&a §aLIME§r | &b §bAQUA§r\n" +
+                        "&c §cL.RED§r | &d §dPINK§r\n" +
+                        "&e §eYELLOW§r | &f §fWHITE§r\n" +
+                        "&l §lBOLD§r | &k §kFUCK§r\n" +
+                        "&n §nUNDER§r | &m §mSTRIKE§r\n" +
+                        "&o §oITALIC§r | &r RESET\n"
+        );
+
         book.setItemMeta(b);
 
         return book;

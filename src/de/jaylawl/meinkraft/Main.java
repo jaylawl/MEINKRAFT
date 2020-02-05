@@ -49,6 +49,16 @@ public class Main extends JavaPlugin  {
             getCommand("gm").setTabCompleter(cmdGamemode);
             enabledCommands++;
         }
+        if (config.getBoolean("Commands.god", true)) {
+            getCommand("god").setExecutor(new CmdGod());
+            pm.registerEvents(new EvtGod(), this);
+            enabledCommands++;
+            enabledListeners++;
+        }
+        if (config.getBoolean("Commands.heal", true)) {
+            getCommand("heal").setExecutor(new CmdHeal());
+            enabledCommands++;
+        }
         if (config.getBoolean("Commands.invsee", true)) {
             CmdInvsee cmdInvsee = new CmdInvsee();
             getCommand("invsee").setExecutor(cmdInvsee);
@@ -64,12 +74,6 @@ public class Main extends JavaPlugin  {
             getCommand("speed").setExecutor(cmdSpeed);
             getCommand("speed").setTabCompleter(cmdSpeed);
             enabledCommands++;
-        }
-        if (config.getBoolean("Commands.god", true)) {
-            getCommand("god").setExecutor(new CmdGod());
-            pm.registerEvents(new EvtGod(), this);
-            enabledCommands++;
-            enabledListeners++;
         }
         if (config.getBoolean("Commands.world", true)) {
             CmdWorld cmdWorld = new CmdWorld();

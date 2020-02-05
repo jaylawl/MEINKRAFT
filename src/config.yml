@@ -20,6 +20,7 @@ Commands:
     fly: true
     gm: true
     god: true
+    heal: true
     invsee: true
     ping: true
     speed: true

@@ -11,13 +11,15 @@ commands:
     description: " "
   gm:
     description: " "
+  god:
+    description: " "
+  heal:
+    description: " "
   invsee:
     description: " "
   ping:
     description: " "
   speed:
-    description: " "
-  god:
     description: " "
   world:
     description: " "

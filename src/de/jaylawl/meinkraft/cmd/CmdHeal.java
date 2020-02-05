@@ -1,17 +1,17 @@
 package de.jaylawl.meinkraft.cmd;
 
-import de.jaylawl.meinkraft.Main;
 import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.Messaging;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 
-public class CmdGod implements CommandExecutor {
+public class CmdHeal implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
@@ -47,19 +47,19 @@ public class CmdGod implements CommandExecutor {
             senderEqualsAffected = true;
         }
 
-        boolean god = !affectedPlayer.hasMetadata("GodMode") || !affectedPlayer.getMetadata("GodMode").get(0).asBoolean();
-        affectedPlayer.setMetadata("GodMode", new FixedMetadataValue(Main.inst(), god));
+        AttributeInstance maxHealth = affectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        affectedPlayer.setHealth(maxHealth != null ? maxHealth.getValue() : 20);
+        affectedPlayer.setExhaustion(0f);
+        affectedPlayer.setSaturation(1f);
+        affectedPlayer.setFoodLevel(20);
 
-        Messaging.feedback(sender, "Set god mode of " + affectedPlayer.getName() + " to " + god);
+        Messaging.feedback(sender, "Fully healed player " + affectedPlayer.getName());
         if (!senderEqualsAffected) {
-            if (god) {
-                Messaging.notifyPlayer(affectedPlayer, "A wizard has turned you into a god");
-            } else {
-                Messaging.notifyPlayer(affectedPlayer, "A wizard has turned you back into a mortal");
-            }
+            Messaging.notifyPlayer(affectedPlayer, "You've been rejuvenated by a wizard");
         }
 
         return true;
     }
+
 
 }

@@ -69,6 +69,10 @@ public class Main extends JavaPlugin  {
             getCommand("ping").setExecutor(new CmdPing());
             enabledCommands++;
         }
+        if (config.getBoolean("Commands.nightvision", true)) {
+            getCommand("nightvision").setExecutor(new CmdNightVision());
+            enabledCommands++;
+        }
         if (config.getBoolean("Commands.speed", true)) {
             CmdSpeed cmdSpeed = new CmdSpeed();
             getCommand("speed").setExecutor(cmdSpeed);

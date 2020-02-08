@@ -24,6 +24,7 @@ Commands:
     invsee: true
     nightvision: true
     ping: true
+    query: true
     speed: true
     world: true
 

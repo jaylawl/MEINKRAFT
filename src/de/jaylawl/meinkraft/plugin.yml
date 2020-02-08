@@ -22,6 +22,8 @@ commands:
     aliases: [nv]
   ping:
     description: " "
+  query:
+    description: " "
   speed:
     description: " "
   world:

@@ -73,6 +73,12 @@ public class Main extends JavaPlugin  {
             getCommand("nightvision").setExecutor(new CmdNightVision());
             enabledCommands++;
         }
+        if (config.getBoolean("Commands.query", true)) {
+            CmdQuery cmdQuery = new CmdQuery();
+            getCommand("query").setExecutor(cmdQuery);
+            getCommand("query").setTabCompleter(cmdQuery);
+            enabledCommands++;
+        }
         if (config.getBoolean("Commands.speed", true)) {
             CmdSpeed cmdSpeed = new CmdSpeed();
             getCommand("speed").setExecutor(cmdSpeed);

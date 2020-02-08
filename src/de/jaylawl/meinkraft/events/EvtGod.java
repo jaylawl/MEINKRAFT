@@ -13,7 +13,10 @@ public class EvtGod implements Listener {
     @EventHandler
     public void event(EntityDamageEvent event) {
         if (event.getEntityType() == EntityType.PLAYER && event.getCause() != EntityDamageEvent.DamageCause.VOID) {
-            if (event.getEntity().getMetadata("GodMode").get(0).asBoolean()) {
+            if (
+                    event.getEntity().hasMetadata("GodMode") &&
+                    event.getEntity().getMetadata("GodMode").get(0).asBoolean()
+            ) {
                 event.setCancelled(true);
             }
         }

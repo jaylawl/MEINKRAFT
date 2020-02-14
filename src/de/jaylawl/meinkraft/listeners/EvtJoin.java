@@ -1,4 +1,4 @@
-package de.jaylawl.meinkraft.events;
+package de.jaylawl.meinkraft.listeners;
 
 import de.jaylawl.meinkraft.Main;
 import org.bukkit.configuration.file.FileConfiguration;

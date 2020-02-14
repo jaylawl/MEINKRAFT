@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft;
 
 import de.jaylawl.meinkraft.cmd.*;
-import de.jaylawl.meinkraft.events.*;
+import de.jaylawl.meinkraft.listeners.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,7 +51,7 @@ public class Main extends JavaPlugin  {
         }
         if (config.getBoolean("Commands.god", true)) {
             getCommand("god").setExecutor(new CmdGod());
-            pm.registerEvents(new EvtGod(), this);
+            pm.registerEvents(new GodListener(), this);
             enabledCommands++;
             enabledListeners++;
         }

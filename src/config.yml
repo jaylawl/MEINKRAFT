@@ -17,73 +17,73 @@
 
 Commands:
 
-    fly: true
-    gm: true
-    god: true
-    heal: true
-    invsee: true
-    nightvision: true
-    ping: true
-    query: true
-    speed: true
-    world: true
+  fly: true
+  gm: true
+  god: true
+  heal: true
+  invsee: true
+  nightvision: true
+  ping: true
+  query: true
+  speed: true
+  world: true
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Modules:
 
-    CommandBlocker:
-        Enabled: true
-        SendFeedback: true
-        BlockedCommands:
-        - '/example1'
-        - '/example2'
-        - '/addasmanyasyoulike'
+  CommandBlocker:
+    Enabled: true
+    SendFeedback: true
+    BlockedCommands:
+      - '/example1'
+      - '/example2'
+      - '/addasmanyasyoulike'
 
-    UnsafePlayerBlocker:
-        Enabled: false
-        ContainingIllegalCharacters:
-            Block: true
-            BlockSpacesOnly: true
-            KickMessage:
-            - '&c&lConnection rejected by the server'
-            - '&4Username contains disallowed character(s)'
-            - '&f'
-            - '&fUsernames must only contain letters, numbers and underscores'
-            - '&fConsider changing your username and rejoin afterwards'
-        NonUniqueUsernames:
-            Block: true
-            KickMessage:
-            - '&c&lConnection rejected by the server'
-            - '&4Duplicate username'
-            - '&f'
-            - '&fThere already is a player with the same name on the server'
-            - '&fConsider changing your username and rejoin afterwards'
-        ContainingKeywords:
-            Block: false
-            Keywords: 
-            - 'Hitler?'
-            - 'Idk whatever floats your boat'
-            KickMessage:
-            - '&c&lConnection rejected by the server'
-            - '&4Username contains blacklisted keyword(s)'
-            - '&r'
-            - '&fThis server deems your username unhealthy to its environment'
-            - '&fConsider changing your username and rejoin afterwards'
-
-    ResourcePackHandler:
-        Enabled: false
-        Link: ''
-        Hash: ''
-        KickOnDecline: true
-        KickOnFailure: true
-        TicksBeforeKick: 20
-        WhitelistOperators: false
-        WhitelistedUUIDs: []
-        KickMessage:
-        - '&c&lResource pack download declined or failed'
+  UnsafePlayerBlocker:
+    Enabled: false
+    ContainingIllegalCharacters:
+      Block: true
+      BlockSpacesOnly: true
+      KickMessage:
+        - '&c&lConnection rejected by the server'
+        - '&4Username contains disallowed character(s)'
+        - '&f'
+        - '&fUsernames must only contain letters, numbers and underscores'
+        - '&fConsider changing your username and rejoin afterwards'
+    NonUniqueUsernames:
+      Block: true
+      KickMessage:
+        - '&c&lConnection rejected by the server'
+        - '&4Duplicate username'
+        - '&f'
+        - '&fThere already is a player with the same name on the server'
+        - '&fConsider changing your username and rejoin afterwards'
+    ContainingKeywords:
+      Block: false
+      Keywords:
+        - 'Hitler?'
+        - 'Idk whatever floats your boat'
+      KickMessage:
+        - '&c&lConnection rejected by the server'
+        - '&4Username contains blacklisted keyword(s)'
         - '&r'
-        - '&fThe resource pack is mandatory for play on this server'
-        - '&fSet resource packs to &9Enabled&r or &9Prompt&r and re-connect'
+        - '&fThis server deems your username unhealthy to its environment'
+        - '&fConsider changing your username and rejoin afterwards'
+
+  ResourcePackHandler:
+    Enabled: false
+    Link: ''
+    Hash: ''
+    KickOnDecline: true
+    KickOnFailure: true
+    TicksBeforeKick: 20
+    WhitelistOperators: false
+    WhitelistedUUIDs: []
+    KickMessage:
+      - '&c&lResource pack download declined or failed'
+      - '&r'
+      - '&fThe resource pack is mandatory for play on this server'
+      - '&fSet resource packs to &9Enabled&r or &9Prompt&r and re-connect'
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

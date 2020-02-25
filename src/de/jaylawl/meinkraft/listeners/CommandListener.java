@@ -8,9 +8,9 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.List;
 
-public class EvtBlockCommand implements Listener {
+public class CommandListener implements Listener {
 
-    public EvtBlockCommand() {
+    public CommandListener() {
     }
 
     @EventHandler

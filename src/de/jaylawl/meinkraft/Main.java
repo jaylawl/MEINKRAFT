@@ -2,9 +2,12 @@ package de.jaylawl.meinkraft;
 
 import de.jaylawl.meinkraft.cmd.*;
 import de.jaylawl.meinkraft.listeners.*;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Logger;
 
 public class Main extends JavaPlugin  {
 
@@ -18,88 +21,125 @@ public class Main extends JavaPlugin  {
 
         instance = this;
         this.saveDefaultConfig();
-        PluginManager pm = getServer().getPluginManager();
+
+        Logger logger = getLogger();
+        PluginManager pluginManager = getServer().getPluginManager();
         FileConfiguration config = getConfig();
 
         if (config.getBoolean("Modules.CommandBlocker.Enabled", true)) {
-            pm.registerEvents(new EvtBlockCommand(), this);
+            pluginManager.registerEvents(new CommandListener(), this);
             enabledModules++;
             enabledListeners++;
         }
         if (config.getBoolean("Modules.UnsafePlayerBlocker.Enabled", false)) {
-            pm.registerEvents(new EvtBlockPlayer(), this);
+            pluginManager.registerEvents(new ConnectionListener(), this);
             enabledModules++;
             enabledListeners++;
         }
-
         if (config.getBoolean("Modules.ResourcePackHandler.Enabled", false)) {
-            pm.registerEvents(new EvtJoin(), this);
-            pm.registerEvents(new EvtResourcePackStatus(), this);
+            pluginManager.registerEvents(new JoinListener(), this);
+            pluginManager.registerEvents(new ResourcePackListener(), this);
             enabledModules++;
             enabledListeners = (enabledListeners + 2);
         }
 
         if (config.getBoolean("Commands.fly", true)) {
-            getCommand("fly").setExecutor(new CmdFly());
-            enabledCommands++;
+            PluginCommand flyCmd = getCommand("fly");
+            if (flyCmd != null) {
+                flyCmd.setExecutor(new CmdFly());
+                enabledCommands++;
+            }
         }
         if (config.getBoolean("Commands.gm", true)) {
-            CmdGamemode cmdGamemode = new CmdGamemode();
-            getCommand("gm").setExecutor(cmdGamemode);
-            getCommand("gm").setTabCompleter(cmdGamemode);
-            enabledCommands++;
+            PluginCommand gmCmd = getCommand("gm");
+            if (gmCmd != null) {
+                CmdGamemode cmdGamemode = new CmdGamemode();
+                gmCmd.setExecutor(cmdGamemode);
+                gmCmd.setTabCompleter(cmdGamemode);
+                enabledCommands++;
+            }
         }
         if (config.getBoolean("Commands.god", true)) {
-            getCommand("god").setExecutor(new CmdGod());
-            pm.registerEvents(new GodListener(), this);
-            enabledCommands++;
-            enabledListeners++;
+            PluginCommand godCmd = getCommand("god");
+            if (godCmd != null) {
+                godCmd.setExecutor(new CmdGod());
+                pluginManager.registerEvents(new GodListener(), this);
+                enabledCommands++;
+                enabledListeners++;
+            }
         }
         if (config.getBoolean("Commands.heal", true)) {
-            getCommand("heal").setExecutor(new CmdHeal());
-            enabledCommands++;
+            PluginCommand healCmd = getCommand("heal");
+            if (healCmd != null) {
+                healCmd.setExecutor(new CmdHeal());
+                enabledCommands++;
+            }
         }
         if (config.getBoolean("Commands.invsee", true)) {
-            CmdInvsee cmdInvsee = new CmdInvsee();
-            getCommand("invsee").setExecutor(cmdInvsee);
-            getCommand("invsee").setTabCompleter(cmdInvsee);
-            enabledCommands++;
+            PluginCommand invseeCmd = getCommand("invsee");
+            if (invseeCmd != null) {
+                CmdInvsee cmdInvsee = new CmdInvsee();
+                invseeCmd.setExecutor(cmdInvsee);
+                invseeCmd.setTabCompleter(cmdInvsee);
+                enabledCommands++;
+            }
         }
         if (config.getBoolean("Commands.ping", true)) {
-            getCommand("ping").setExecutor(new CmdPing());
-            enabledCommands++;
+            PluginCommand pingCmd = getCommand("ping");
+            if (pingCmd != null) {
+                pingCmd.setExecutor(new CmdPing());
+                enabledCommands++;
+            }
         }
         if (config.getBoolean("Commands.nightvision", true)) {
-            getCommand("nightvision").setExecutor(new CmdNightVision());
-            enabledCommands++;
+            PluginCommand nightvisionCmd = getCommand("nightvision");
+            if (nightvisionCmd != null) {
+                nightvisionCmd.setExecutor(new CmdNightVision());
+                enabledCommands++;
+            }
         }
         if (config.getBoolean("Commands.query", true)) {
-            CmdQuery cmdQuery = new CmdQuery();
-            getCommand("query").setExecutor(cmdQuery);
-            getCommand("query").setTabCompleter(cmdQuery);
-            enabledCommands++;
+            PluginCommand queryCmd = getCommand("query");
+            if (queryCmd != null) {
+                CmdQuery cmdQuery = new CmdQuery();
+                queryCmd.setExecutor(cmdQuery);
+                queryCmd.setTabCompleter(cmdQuery);
+                enabledCommands++;
+            }
         }
         if (config.getBoolean("Commands.speed", true)) {
-            CmdSpeed cmdSpeed = new CmdSpeed();
-            getCommand("speed").setExecutor(cmdSpeed);
-            getCommand("speed").setTabCompleter(cmdSpeed);
-            enabledCommands++;
+            PluginCommand speedCmd = getCommand("speed");
+            if (speedCmd != null) {
+                CmdSpeed cmdSpeed = new CmdSpeed();
+                speedCmd.setExecutor(cmdSpeed);
+                speedCmd.setTabCompleter(cmdSpeed);
+                enabledCommands++;
+            }
         }
         if (config.getBoolean("Commands.world", true)) {
-            CmdWorld cmdWorld = new CmdWorld();
-            getCommand("world").setExecutor(cmdWorld);
-            getCommand("world").setTabCompleter(cmdWorld);
-            enabledCommands++;
+            PluginCommand worldCmd = getCommand("world");
+            if (worldCmd != null) {
+                CmdWorld cmdWorld = new CmdWorld();
+                worldCmd.setExecutor(cmdWorld);
+                worldCmd.setTabCompleter(cmdWorld);
+                enabledCommands++;
+            }
         }
 
         if (enabledCommands + enabledModules + enabledListeners > 0) {
-            getCommand("mk").setExecutor(new CmdMaster());
-            getLogger().info("Enabled " + enabledCommands + " command(s)");
-            getLogger().info("Enabled " + enabledModules + " module(s)");
-            getLogger().info("Enabled " + enabledListeners + " listener(s)");
+            PluginCommand masterCmd = getCommand("mk");
+            if (masterCmd != null) {
+                masterCmd.setExecutor(new CmdMaster());
+                logger.info("Enabled " + enabledCommands + " command(s)");
+                logger.info("Enabled " + enabledModules + " module(s)");
+                logger.info("Enabled " + enabledListeners + " listener(s)");
+            } else {
+                logger.info("§cFailed to enable the master command; disabling plugin");
+                pluginManager.disablePlugin(this);
+            }
         } else {
-            getLogger().info("§cAll commands & modules were disabled via config.yml; disabling plugin");
-            pm.disablePlugin(this);
+            logger.info("§cAll commands & modules were disabled via config.yml; disabling plugin");
+            pluginManager.disablePlugin(this);
         }
 
     }

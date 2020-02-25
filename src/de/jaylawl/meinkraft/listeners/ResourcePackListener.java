@@ -9,9 +9,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class EvtResourcePackStatus implements Listener {
+public class ResourcePackListener implements Listener {
 
-    public EvtResourcePackStatus() {
+    public ResourcePackListener() {
     }
 
     @EventHandler

@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.listeners;
 
-import de.jaylawl.meinkraft.Main;
+import de.jaylawl.meinkraft.MEINKRAFT;
 import de.jaylawl.meinkraft.util.Messaging;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,10 +18,10 @@ public class CommandListener implements Listener {
 
         if (!event.getPlayer().hasPermission("mk.plugins")) {
 
-            List<String> blockedCmds = Main.inst().getConfig().getStringList("Modules.CommandBlocker.BlockedCommands");
+            List<String> blockedCmds = MEINKRAFT.inst().getConfig().getStringList("Modules.CommandBlocker.BlockedCommands");
             if (!blockedCmds.isEmpty() && blockedCmds.contains(event.getMessage())) {
                 event.setCancelled(true);
-                if (Main.inst().getConfig().getBoolean("Modules.CommandBlocker.SendFeedback", true)) {
+                if (MEINKRAFT.inst().getConfig().getBoolean("Modules.CommandBlocker.SendFeedback", true)) {
                     Messaging.noPermission(event.getPlayer());
                 }
             }

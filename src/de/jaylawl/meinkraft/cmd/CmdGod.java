@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.cmd;
 
-import de.jaylawl.meinkraft.Main;
+import de.jaylawl.meinkraft.MEINKRAFT;
 import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.Messaging;
 import org.bukkit.Bukkit;
@@ -48,7 +48,7 @@ public class CmdGod implements CommandExecutor {
         }
 
         boolean god = !affectedPlayer.hasMetadata("GodMode") || !affectedPlayer.getMetadata("GodMode").get(0).asBoolean();
-        affectedPlayer.setMetadata("GodMode", new FixedMetadataValue(Main.inst(), god));
+        affectedPlayer.setMetadata("GodMode", new FixedMetadataValue(MEINKRAFT.inst(), god));
 
         Messaging.feedback(sender, "Set god mode of " + affectedPlayer.getName() + " to " + god);
         if (!senderEqualsAffected) {

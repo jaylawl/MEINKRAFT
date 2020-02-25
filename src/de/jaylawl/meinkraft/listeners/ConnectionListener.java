@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.listeners;
 
-import de.jaylawl.meinkraft.Main;
+import de.jaylawl.meinkraft.MEINKRAFT;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,7 +18,7 @@ public class ConnectionListener implements Listener {
     public void event(PlayerLoginEvent event) {
 
         String pn = event.getPlayer().getName();
-        FileConfiguration config = Main.inst().getConfig();
+        FileConfiguration config = MEINKRAFT.inst().getConfig();
         String mn = "Modules.UnsafePlayerBlocker.";
         StringBuilder sb = new StringBuilder("§r");
 

@@ -9,9 +9,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
-public class Main extends JavaPlugin  {
+public class MEINKRAFT extends JavaPlugin  {
 
-    private static Main instance;
+    private static MEINKRAFT instance;
     private static int enabledCommands = 0;
     private static int enabledModules = 0;
     private static int enabledListeners = 0;
@@ -144,7 +144,7 @@ public class Main extends JavaPlugin  {
 
     }
 
-    public static Main inst() {
+    public static MEINKRAFT inst() {
         return instance;
     }
 

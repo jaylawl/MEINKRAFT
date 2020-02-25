@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.listeners;
 
-import de.jaylawl.meinkraft.Main;
+import de.jaylawl.meinkraft.MEINKRAFT;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +13,7 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void event(PlayerJoinEvent event) {
-        FileConfiguration config = Main.inst().getConfig();
+        FileConfiguration config = MEINKRAFT.inst().getConfig();
         String downloadURL = config.getString("Modules.ResourcePackHandler.Link", "");
         String packHash = config.getString("Modules.ResourcePackHandler.Hash", "");
         if (downloadURL != null && packHash != null) {

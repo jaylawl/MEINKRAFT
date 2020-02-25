@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.cmd;
 
-import de.jaylawl.meinkraft.Main;
+import de.jaylawl.meinkraft.MEINKRAFT;
 import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.Messaging;
 import de.jaylawl.meinkraft.util.HelpBook;
@@ -32,7 +32,7 @@ public class CmdMaster implements CommandExecutor {
 
             case "reload":
             case "r":
-                Main.inst().reloadConfig();
+                MEINKRAFT.inst().reloadConfig();
                 Messaging.feedback(sender, "Successfully reloaded MEINKRAFT/config.yml");
                 break;
 

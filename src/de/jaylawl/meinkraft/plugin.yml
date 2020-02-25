@@ -1,4 +1,4 @@
-main: de.jaylawl.meinkraft.Main
+main: de.jaylawl.meinkraft.MEINKRAFT
 name: MEINKRAFT
 version: 1.0.5
 api-version: "1.14"

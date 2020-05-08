@@ -43,6 +43,7 @@ public class CmdQuery implements CommandExecutor, TabCompleter {
                         "gamemode",
                         "godmode",
                         "health",
+                        "ip",
                         "location",
                         "potioneffects",
                         "saturation",
@@ -136,6 +137,9 @@ public class CmdQuery implements CommandExecutor, TabCompleter {
             case "scoreboardtags":
             case "tags":
                 result = affectedPlayer.getScoreboardTags();
+                break;
+            case "ip":
+                result = affectedPlayer.getAddress();
                 break;
         }
 

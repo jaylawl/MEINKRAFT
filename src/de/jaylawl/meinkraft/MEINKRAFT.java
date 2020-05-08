@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
-public class MEINKRAFT extends JavaPlugin  {
+public class MEINKRAFT extends JavaPlugin {
 
     private static MEINKRAFT instance;
     private static int enabledCommands = 0;

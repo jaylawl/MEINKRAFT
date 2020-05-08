@@ -39,7 +39,7 @@ public class CmdNightVision implements CommandExecutor {
             }
         }
 
-        if (sender instanceof Player && sender == affectedPlayer) {
+        if (sender == affectedPlayer) {
             senderEqualsAffected = true;
             if (!CmdPermission.hasOthers(sender, label)) {
                 Messaging.noPermissionOthers(sender);

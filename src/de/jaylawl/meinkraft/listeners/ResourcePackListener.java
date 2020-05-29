@@ -17,8 +17,6 @@ public class ResourcePackListener implements Listener {
     @EventHandler
     public void event(PlayerResourcePackStatusEvent event) {
 
-        System.out.println("EVENT");
-
         FileConfiguration config = MEINKRAFT.inst().getConfig();
         Player p = event.getPlayer();
         boolean kick = false;

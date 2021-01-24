@@ -40,7 +40,6 @@ public class CmdInvsee implements CommandExecutor, TabCompleter {
         }
 
         return TabHelper.sortedCompletions(args[argN - 1], completions);
-
     }
 
     @Override
@@ -56,7 +55,6 @@ public class CmdInvsee implements CommandExecutor, TabCompleter {
 
         Player player = (Player) sender;
         Player affectedPlayer;
-        int inventoryType;
 
         if (args.length == 0) {
             affectedPlayer = player;
@@ -68,31 +66,25 @@ public class CmdInvsee implements CommandExecutor, TabCompleter {
             }
         }
 
-        if (args.length < 1) {
-            inventoryType = 0;
-        } else {
-            switch (args[1]) {
-                case "inventory":
-                case "inv":
-                case "i":
-                    inventoryType = 0;
-                    break;
-                case "enderchest":
-                case "endchest":
-                case "echest":
-                case "e":
-                    inventoryType = 1;
-                    break;
-                default:
-                    MessagingUtil.invalidArguments(sender, args[1], "unknown inventory type");
-                    return true;
+        switch (args.length > 1 ? args[1].toLowerCase() : "") {
+            case "":
+            case "inventory":
+            case "inv":
+            case "i": {
+                player.openInventory(affectedPlayer.getInventory());
+                break;
             }
-        }
-
-        if (inventoryType == 0) {
-            player.openInventory(affectedPlayer.getInventory());
-        } else {
-            player.openInventory(affectedPlayer.getEnderChest());
+            case "enderchest":
+            case "endchest":
+            case "echest":
+            case "e": {
+                player.openInventory(affectedPlayer.getEnderChest());
+                break;
+            }
+            default: {
+                MessagingUtil.invalidArguments(sender, args[1], "is not a valid inventory type");
+                return true;
+            }
         }
 
         return true;

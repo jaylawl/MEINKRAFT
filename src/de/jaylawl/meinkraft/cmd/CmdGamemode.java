@@ -3,6 +3,7 @@ package de.jaylawl.meinkraft.cmd;
 import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -47,7 +48,6 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
         }
 
         return TabHelper.sortedCompletions(args[argN - 1], completions);
-
     }
 
     @Override
@@ -60,10 +60,9 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
 
         GameMode gameMode = null;
         Player affectedPlayer;
-        boolean senderEqualsAffected = false;
 
         if (args.length == 0) {
-            sender.sendMessage("§a/gm §c<gamemode> §7[player]");
+            sender.sendMessage(ChatColor.GREEN + "/gm " + ChatColor.RED + "<gamemode> " + ChatColor.GRAY + "[player]");
             return true;
         } else {
             if (args[0].matches("(\\d+)")) {
@@ -81,7 +80,7 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
                         gameMode = GameMode.SPECTATOR;
                         break;
                     default:
-                        MessagingUtil.genericError(sender, "Numeric gamemode value must be between 0 and 3");
+                        MessagingUtil.genericError(sender, "Numeric gamemode value must be between 0 and 3 inclusive");
                         return true;
                 }
             } else {
@@ -108,13 +107,13 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
             if (sender instanceof Player) {
                 affectedPlayer = (Player) sender;
             } else {
-                MessagingUtil.genericError(sender, "§cMissing player argument");
+                MessagingUtil.genericError(sender, "Missing player argument");
                 return true;
             }
         }
 
-        if (sender instanceof Player && sender == affectedPlayer) {
-            senderEqualsAffected = true;
+        boolean senderEqualsAffected = sender == affectedPlayer;
+        if (!senderEqualsAffected) {
             if (!CmdPermission.hasOthers(sender, label)) {
                 MessagingUtil.noPermissionOthers(sender);
                 return true;

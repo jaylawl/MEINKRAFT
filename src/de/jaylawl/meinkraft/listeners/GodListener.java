@@ -1,39 +1,35 @@
 package de.jaylawl.meinkraft.listeners;
 
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import de.jaylawl.meinkraft.util.DataCenter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class GodListener implements Listener {
 
-    public GodListener() {
+    private final DataCenter dataCenter;
+
+    public GodListener(@NotNull DataCenter dataCenter) {
+        this.dataCenter = dataCenter;
     }
 
+    //
+
     @EventHandler
-    public void damageEvent(EntityDamageEvent event) {
-        if (event.getEntityType() == EntityType.PLAYER && event.getCause() != EntityDamageEvent.DamageCause.VOID) {
-            if (
-                    event.getEntity().hasMetadata("GodMode") &&
-                    event.getEntity().getMetadata("GodMode").get(0).asBoolean()
-            ) {
+    public void damageEvent(@NotNull EntityDamageEvent event) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.VOID) {
+            if (this.dataCenter.isInGodMode(event.getEntity().getUniqueId())) {
                 event.setCancelled(true);
             }
         }
     }
 
     @EventHandler
-    public void hungerEvent(FoodLevelChangeEvent event) {
-        if (event.getEntity().getType() == EntityType.PLAYER) {
-            if (
-                    event.getEntity().hasMetadata("GodMode") &&
-                    event.getEntity().getMetadata("GodMode").get(0).asBoolean() &&
-                    event.getFoodLevel() < ((Player) event.getEntity()).getFoodLevel()
-            ) {
-                event.setCancelled(true);
-            }
+    public void hungerEvent(@NotNull FoodLevelChangeEvent event) {
+        if (this.dataCenter.isInGodMode(event.getEntity().getUniqueId())) {
+            event.setCancelled(true);
         }
     }
 

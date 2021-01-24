@@ -28,7 +28,7 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
             return Collections.emptyList();
         }
 
-        int argumentNumber = TabHelper.getArgNumber(arguments);
+        int argumentNumber = TabHelper.getArgumentNumber(arguments);
         List<String> completions = new ArrayList<>();
 
         switch (argumentNumber) {

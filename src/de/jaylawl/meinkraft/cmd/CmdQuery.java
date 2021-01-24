@@ -27,7 +27,7 @@ public class CmdQuery implements CommandExecutor, TabCompleter {
             return Collections.emptyList();
         }
 
-        int argN = TabHelper.getArgNumber(arguments);
+        int argN = TabHelper.getArgumentNumber(arguments);
         List<String> completions = new ArrayList<>();
 
         switch (argN) {

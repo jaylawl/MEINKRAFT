@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,7 +17,7 @@ public class CmdNightVision implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!CmdPermission.hasAny(sender, label)) {
-            Messaging.noPermission(sender);
+            MessagingUtil.noPermission(sender);
             return true;
         }
 
@@ -28,13 +28,13 @@ public class CmdNightVision implements CommandExecutor {
             if (sender instanceof Player) {
                 affectedPlayer = (Player) sender;
             } else {
-                Messaging.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(sender, "Missing player argument");
                 return true;
             }
         } else {
             affectedPlayer = Bukkit.getPlayer(args[0]);
             if (affectedPlayer == null) {
-                Messaging.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
                 return true;
             }
         }
@@ -42,7 +42,7 @@ public class CmdNightVision implements CommandExecutor {
         if (sender == affectedPlayer) {
             senderEqualsAffected = true;
             if (!CmdPermission.hasOthers(sender, label)) {
-                Messaging.noPermissionOthers(sender);
+                MessagingUtil.noPermissionOthers(sender);
                 return true;
             }
         }
@@ -56,14 +56,14 @@ public class CmdNightVision implements CommandExecutor {
             affectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 2147483647, 214, true, false, true), true);
             sender.sendMessage("Gave \"permanent\" night vision to " + affectedPlayer.getName());
             if (!senderEqualsAffected) {
-                Messaging.notifyPlayer(affectedPlayer, "A wizard made you drink a cauldron of night vision potion");
+                MessagingUtil.notifyPlayer(affectedPlayer, "A wizard made you drink a cauldron of night vision potion");
             }
 
         } else {
             affectedPlayer.removePotionEffect(PotionEffectType.NIGHT_VISION);
             sender.sendMessage("Removed \"permanent\" night vision from " + affectedPlayer.getName());
             if (!senderEqualsAffected) {
-                Messaging.notifyPlayer(affectedPlayer, "A wizard has cast away your night vision ability");
+                MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has cast away your night vision ability");
             }
 
         }

@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -64,24 +64,24 @@ public class CmdQuery implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!CmdPermission.hasAny(sender, label)) {
-            Messaging.noPermission(sender);
+            MessagingUtil.noPermission(sender);
             return true;
         }
 
         Player affectedPlayer;
 
         if (args.length < 1) {
-            Messaging.genericError(sender, "Missing player argument");
+            MessagingUtil.genericError(sender, "Missing player argument");
             return true;
         } else {
             affectedPlayer = Bukkit.getPlayer(args[0]);
             if (affectedPlayer == null) {
-                Messaging.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
                 return true;
             }
         }
         if (args.length < 2) {
-            Messaging.genericError(sender, "Missing query argument");
+            MessagingUtil.genericError(sender, "Missing query argument");
             return true;
         }
 

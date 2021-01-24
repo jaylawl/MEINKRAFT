@@ -1,30 +1,32 @@
-main: de.jaylawl.meinkraft.MEINKRAFT
+main: de.jaylawl.meinkraft.Meinkraft
 name: MEINKRAFT
-version: 1.0.5
-api-version: "1.15"
+version: 1.1.0
+api-version: "1.16"
 author: jaylawl
 description: Lightweight library of admin tools
 commands:
-  mk:
-    description: Master command
+  meinkraft:
+    aliases: [mk]
+    permission: "mk.admin"
+    description: "Master command"
   fly:
-    description: " "
+    permission: "mk.fly"
   gm:
-    description: " "
+    permission: "mk.gamemode"
   god:
-    description: " "
+    permission: "mk.god"
   heal:
-    description: " "
+    permission: "mk.heal"
   invsee:
-    description: " "
+    permission: "mk.invsee"
   nightvision:
-    description: " "
     aliases: [nv]
+    permission: "mk.nightvision"
   ping:
-    description: " "
+    permission: "mk.ping"
   query:
-    description: " "
+    permission: "mk.query"
   speed:
-    description: " "
+    permission: "mk.speed"
   world:
-    description: " "
+    permission: "mk.world"

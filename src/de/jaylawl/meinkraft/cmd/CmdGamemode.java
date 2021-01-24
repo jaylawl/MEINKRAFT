@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -54,7 +54,7 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!CmdPermission.hasAny(sender, label)) {
-            Messaging.noPermission(sender);
+            MessagingUtil.noPermission(sender);
             return true;
         }
 
@@ -81,7 +81,7 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
                         gameMode = GameMode.SPECTATOR;
                         break;
                     default:
-                        Messaging.genericError(sender, "Numeric gamemode value must be between 0 and 3");
+                        MessagingUtil.genericError(sender, "Numeric gamemode value must be between 0 and 3");
                         return true;
                 }
             } else {
@@ -92,7 +92,7 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
                     }
                 }
                 if (gameMode == null) {
-                    Messaging.invalidArguments(sender, args[0], "is not a valid gamemode");
+                    MessagingUtil.invalidArguments(sender, args[0], "is not a valid gamemode");
                     return true;
                 }
             }
@@ -101,14 +101,14 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
         if (args.length > 1) {
             affectedPlayer = Bukkit.getPlayer(args[1]);
             if (affectedPlayer == null) {
-                Messaging.invalidArguments(sender, args[1], "is not an online player");
+                MessagingUtil.invalidArguments(sender, args[1], "is not an online player");
                 return true;
             }
         } else {
             if (sender instanceof Player) {
                 affectedPlayer = (Player) sender;
             } else {
-                Messaging.genericError(sender, "§cMissing player argument");
+                MessagingUtil.genericError(sender, "§cMissing player argument");
                 return true;
             }
         }
@@ -116,16 +116,16 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
         if (sender instanceof Player && sender == affectedPlayer) {
             senderEqualsAffected = true;
             if (!CmdPermission.hasOthers(sender, label)) {
-                Messaging.noPermissionOthers(sender);
+                MessagingUtil.noPermissionOthers(sender);
                 return true;
             }
         }
 
         affectedPlayer.setGameMode(gameMode);
         String formattedGameMode = affectedPlayer.getGameMode().toString().toLowerCase();
-        Messaging.feedback(sender, "Set game mode of " + affectedPlayer.getName() + " to " + formattedGameMode);
+        MessagingUtil.feedback(sender, "Set game mode of " + affectedPlayer.getName() + " to " + formattedGameMode);
         if (!senderEqualsAffected) {
-            Messaging.notifyPlayer(affectedPlayer, "A wizard set your game mode to " + formattedGameMode);
+            MessagingUtil.notifyPlayer(affectedPlayer, "A wizard set your game mode to " + formattedGameMode);
         }
 
         return true;

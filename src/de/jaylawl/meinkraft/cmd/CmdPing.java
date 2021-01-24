@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,19 +19,19 @@ public class CmdPing implements CommandExecutor {
         if (args.length == 0) {
             if (sender instanceof Player) {
                 affectedPlayer = (Player) sender;
-                Messaging.notifyPlayer(affectedPlayer, "A wizard responded within " + affectedPlayer.spigot().getPing() + " ms");
+                MessagingUtil.notifyPlayer(affectedPlayer, "A wizard responded within " + affectedPlayer.spigot().getPing() + " ms");
             } else {
-                Messaging.genericError(sender, "§cMissing player argument");
+                MessagingUtil.genericError(sender, "§cMissing player argument");
             }
         } else {
             affectedPlayer = Bukkit.getPlayer(args[0]);
             if (affectedPlayer == null) {
-                Messaging.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
             } else {
                 if (!CmdPermission.hasOthers(sender, label)) {
-                    Messaging.noPermissionOthers(sender);
+                    MessagingUtil.noPermissionOthers(sender);
                 } else {
-                    Messaging.feedback(sender, "Ping of " + affectedPlayer.getName() + ": " + affectedPlayer.spigot().getPing() + " ms");
+                    MessagingUtil.feedback(sender, "Ping of " + affectedPlayer.getName() + ": " + affectedPlayer.spigot().getPing() + " ms");
                 }
             }
         }

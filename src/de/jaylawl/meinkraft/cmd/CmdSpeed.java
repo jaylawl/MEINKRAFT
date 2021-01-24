@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -53,7 +53,7 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!CmdPermission.hasAny(sender, label)) {
-            Messaging.noPermission(sender);
+            MessagingUtil.noPermission(sender);
             return true;
         }
 
@@ -61,22 +61,22 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
         boolean senderEqualsAffected = false;
 
         if (args.length < 1) {
-            Messaging.genericError(sender, "Missing type argument");
+            MessagingUtil.genericError(sender, "Missing type argument");
             return true;
         } else if (args.length < 2) {
-            Messaging.genericError(sender, "Missing value argument");
+            MessagingUtil.genericError(sender, "Missing value argument");
             return true;
         } else if (args.length < 3) {
             if (sender instanceof Player) {
                 affectedPlayer = (Player) sender;
             } else {
-                Messaging.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(sender, "Missing player argument");
                 return true;
             }
         } else {
             affectedPlayer = Bukkit.getPlayer(args[2]);
             if (affectedPlayer == null) {
-                Messaging.invalidArguments(sender, args[2], "is not an online player");
+                MessagingUtil.invalidArguments(sender, args[2], "is not an online player");
                 return true;
             }
         }
@@ -84,7 +84,7 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
         if (sender instanceof Player && sender == affectedPlayer) {
             senderEqualsAffected = true;
             if (!CmdPermission.hasOthers(sender, label)) {
-                Messaging.noPermissionOthers(sender);
+                MessagingUtil.noPermissionOthers(sender);
                 return true;
             }
         }
@@ -104,7 +104,7 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
                 type = "walk";
                 break;
             default:
-                Messaging.invalidArguments(sender, args[0], "unknown type; must be \"flight\" or \"walk\"");
+                MessagingUtil.invalidArguments(sender, args[0], "unknown type; must be \"flight\" or \"walk\"");
                 return true;
         }
 
@@ -114,7 +114,7 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
         } else if (args[1].matches("\\d*.*\\d*")) {
             value = Float.parseFloat(args[1]);
         } else {
-            Messaging.invalidArguments(sender, args[1], "unknown value; must be a number or \"reset\"");
+            MessagingUtil.invalidArguments(sender, args[1], "unknown value; must be a number or \"reset\"");
             return true;
         }
         value = Math.min(1f, value);
@@ -125,9 +125,9 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
         } else {
             affectedPlayer.setWalkSpeed(value);
         }
-        Messaging.feedback(sender, "Set " + type + " speed of " + affectedPlayer.getName() + " to " + value);
+        MessagingUtil.feedback(sender, "Set " + type + " speed of " + affectedPlayer.getName() + " to " + value);
         if (!senderEqualsAffected) {
-            Messaging.notifyPlayer(affectedPlayer, "A wizard has set your " + type + " speed to " + value);
+            MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has set your " + type + " speed to " + value);
         }
 
         return true;

@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.listeners;
 
-import de.jaylawl.meinkraft.MEINKRAFT;
+import de.jaylawl.meinkraft.Meinkraft;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ public class ResourcePackListener implements Listener {
     @EventHandler
     public void event(PlayerResourcePackStatusEvent event) {
 
-        FileConfiguration config = MEINKRAFT.inst().getConfig();
+        FileConfiguration config = Meinkraft.inst().getConfig();
         Player p = event.getPlayer();
         boolean kick = false;
         String mn = "Modules.ResourcePackHandler.";
@@ -57,7 +57,7 @@ public class ResourcePackListener implements Listener {
                 public void run() {
                     p.kickPlayer(ChatColor.translateAlternateColorCodes('&', sb.toString()));
                 }
-            }.runTaskLater(MEINKRAFT.inst(), kickDelay);
+            }.runTaskLater(Meinkraft.inst(), kickDelay);
         }
 
     }

@@ -1,8 +1,8 @@
 package de.jaylawl.meinkraft.cmd;
 
-import de.jaylawl.meinkraft.MEINKRAFT;
+import de.jaylawl.meinkraft.Meinkraft;
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.HelpBook;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +16,7 @@ public class CmdMaster implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!CmdPermission.hasAny(sender, "admin")) {
-            Messaging.noPermission(sender);
+            MessagingUtil.noPermission(sender);
             return true;
         }
 
@@ -32,8 +32,8 @@ public class CmdMaster implements CommandExecutor {
 
             case "reload":
             case "r":
-                MEINKRAFT.inst().reloadConfig();
-                Messaging.feedback(sender, "Successfully reloaded MEINKRAFT/config.yml");
+                Meinkraft.inst().reloadConfig();
+                MessagingUtil.feedback(sender, "Successfully reloaded MEINKRAFT/config.yml");
                 break;
 
             case "help":
@@ -41,7 +41,7 @@ public class CmdMaster implements CommandExecutor {
             case "?":
             default:
                 if (!(sender instanceof Player)) {
-                    Messaging.ingameExclusive(sender);
+                    MessagingUtil.ingameExclusive(sender);
                     return true;
                 }
                 ((Player) sender).openBook(HelpBook.make());

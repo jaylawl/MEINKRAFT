@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -47,10 +47,10 @@ public class CmdInvsee implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!CmdPermission.hasAny(sender, label)) {
-            Messaging.noPermission(sender);
+            MessagingUtil.noPermission(sender);
             return true;
         } else if (sender instanceof ConsoleCommandSender) {
-            Messaging.ingameExclusive(sender);
+            MessagingUtil.ingameExclusive(sender);
             return true;
         }
 
@@ -63,7 +63,7 @@ public class CmdInvsee implements CommandExecutor, TabCompleter {
         } else {
             affectedPlayer = Bukkit.getPlayer(args[0]);
             if (affectedPlayer == null) {
-                Messaging.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
                 return true;
             }
         }
@@ -84,7 +84,7 @@ public class CmdInvsee implements CommandExecutor, TabCompleter {
                     inventoryType = 1;
                     break;
                 default:
-                    Messaging.invalidArguments(sender, args[1], "unknown inventory type");
+                    MessagingUtil.invalidArguments(sender, args[1], "unknown inventory type");
                     return true;
             }
         }

@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,7 +15,7 @@ public class CmdFly implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!CmdPermission.hasAny(sender, label)) {
-            Messaging.noPermission(sender);
+            MessagingUtil.noPermission(sender);
             return true;
         }
 
@@ -26,13 +26,13 @@ public class CmdFly implements CommandExecutor {
             if (sender instanceof Player) {
                 affectedPlayer = (Player) sender;
             } else {
-                Messaging.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(sender, "Missing player argument");
                 return true;
             }
         } else {
             affectedPlayer = Bukkit.getPlayer(args[0]);
             if (affectedPlayer == null) {
-                Messaging.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
                 return true;
             }
         }
@@ -40,7 +40,7 @@ public class CmdFly implements CommandExecutor {
         if (sender instanceof Player && sender == affectedPlayer) {
             senderEqualsAffected = true;
             if (!CmdPermission.hasOthers(sender, label)) {
-                Messaging.noPermissionOthers(sender);
+                MessagingUtil.noPermissionOthers(sender);
                 return true;
             }
         }
@@ -49,9 +49,9 @@ public class CmdFly implements CommandExecutor {
         sender.sendMessage("Set flight mode of " + affectedPlayer.getName() + " to " + affectedPlayer.getAllowFlight());
         if (!senderEqualsAffected) {
             if (affectedPlayer.getAllowFlight()) {
-                Messaging.notifyPlayer(affectedPlayer, "A wizard has granted you flight powers");
+                MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has granted you flight powers");
             } else {
-                Messaging.notifyPlayer(affectedPlayer, "A wizard has clipped your wings");
+                MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has clipped your wings");
             }
         }
 

@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -52,7 +52,7 @@ public class CmdWorld implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!CmdPermission.hasAny(sender, label)) {
-            Messaging.noPermission(sender);
+            MessagingUtil.noPermission(sender);
             return true;
         }
 
@@ -61,13 +61,13 @@ public class CmdWorld implements CommandExecutor, TabCompleter {
         World world;
 
         if (args.length < 1) {
-            Messaging.genericError(sender, "Missing world argument");
+            MessagingUtil.genericError(sender, "Missing world argument");
             return true;
         } else if (args.length < 2) {
             if (sender instanceof Player) {
                 affectedPlayer = (Player) sender;
             } else {
-                Messaging.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(sender, "Missing player argument");
                 return true;
             }
         } else {
@@ -77,26 +77,26 @@ public class CmdWorld implements CommandExecutor, TabCompleter {
         world = Bukkit.getWorld(args[0]);
 
         if (world == null) {
-            Messaging.invalidArguments(sender, args[0], "is not a loaded world");
+            MessagingUtil.invalidArguments(sender, args[0], "is not a loaded world");
             return true;
         }
         if (affectedPlayer == null) {
-            Messaging.invalidArguments(sender, args[1], "is not an online player");
+            MessagingUtil.invalidArguments(sender, args[1], "is not an online player");
             return true;
         }
 
         if (sender instanceof Player && sender == affectedPlayer) {
             senderEqualsAffected = true;
             if (!CmdPermission.hasOthers(sender, label)) {
-                Messaging.noPermissionOthers(sender);
+                MessagingUtil.noPermissionOthers(sender);
                 return true;
             }
         }
 
         affectedPlayer.teleport(world.getSpawnLocation().add(0.5, 0, 0.5));
-        Messaging.feedback(sender, "Sent player " + affectedPlayer.getName() + " to world \"" + world.getName() + "\"");
+        MessagingUtil.feedback(sender, "Sent player " + affectedPlayer.getName() + " to world \"" + world.getName() + "\"");
         if (!senderEqualsAffected) {
-            Messaging.notifyPlayer(affectedPlayer, "A wizard has poofed you into another world");
+            MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has poofed you into another world");
         }
 
         return true;

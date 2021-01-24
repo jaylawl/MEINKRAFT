@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.Messaging;
+import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -28,20 +28,20 @@ public class CmdHeal implements CommandExecutor {
             if (sender instanceof Player) {
                 affectedPlayer = (Player) sender;
             } else {
-                Messaging.genericError(sender, "§cMissing player argument");
+                MessagingUtil.genericError(sender, "§cMissing player argument");
                 return true;
             }
         } else {
             affectedPlayer = Bukkit.getPlayer(args[0]);
             if (affectedPlayer == null) {
-                Messaging.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
                 return true;
             }
         }
 
         if (sender instanceof Player && sender == affectedPlayer) {
             if (!CmdPermission.hasOthers(sender, label)) {
-                Messaging.noPermissionOthers(sender);
+                MessagingUtil.noPermissionOthers(sender);
                 return true;
             }
             senderEqualsAffected = true;
@@ -53,9 +53,9 @@ public class CmdHeal implements CommandExecutor {
         affectedPlayer.setSaturation(1f);
         affectedPlayer.setFoodLevel(20);
 
-        Messaging.feedback(sender, "Fully healed player " + affectedPlayer.getName());
+        MessagingUtil.feedback(sender, "Fully healed player " + affectedPlayer.getName());
         if (!senderEqualsAffected) {
-            Messaging.notifyPlayer(affectedPlayer, "You've been rejuvenated by a wizard");
+            MessagingUtil.notifyPlayer(affectedPlayer, "You've been rejuvenated by a wizard");
         }
 
         return true;

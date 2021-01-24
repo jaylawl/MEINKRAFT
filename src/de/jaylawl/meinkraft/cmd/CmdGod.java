@@ -30,7 +30,6 @@ public class CmdGod implements CommandExecutor {
         }
 
         Player affectedPlayer;
-        boolean senderEqualsAffected = false;
 
         if (args.length < 1) {
             if (sender instanceof Player) {
@@ -47,12 +46,12 @@ public class CmdGod implements CommandExecutor {
             }
         }
 
-        if (sender == affectedPlayer) {
+        boolean senderEqualsAffected = sender == affectedPlayer;
+        if (!senderEqualsAffected) {
             if (!CmdPermission.hasOthers(sender, label)) {
                 MessagingUtil.noPermissionOthers(sender);
                 return true;
             }
-            senderEqualsAffected = true;
         }
 
         boolean toggledGodModeState = this.dataCenter.toggleGodMode(affectedPlayer.getUniqueId());

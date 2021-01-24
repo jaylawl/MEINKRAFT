@@ -3,7 +3,6 @@ package de.jaylawl.meinkraft.cmd;
 import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.DataCenter;
 import de.jaylawl.meinkraft.util.MessagingUtil;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

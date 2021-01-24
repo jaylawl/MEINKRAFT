@@ -1,6 +1,8 @@
 package de.jaylawl.meinkraft.listeners;
 
 import de.jaylawl.meinkraft.util.DataCenter;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -18,7 +20,7 @@ public class GodListener implements Listener {
     //
 
     @EventHandler
-    public void damageEvent(@NotNull EntityDamageEvent event) {
+    public void onEntityDamage(@NotNull EntityDamageEvent event) {
         if (event.getCause() != EntityDamageEvent.DamageCause.VOID) {
             if (this.dataCenter.isInGodMode(event.getEntity().getUniqueId())) {
                 event.setCancelled(true);
@@ -27,9 +29,15 @@ public class GodListener implements Listener {
     }
 
     @EventHandler
-    public void hungerEvent(@NotNull FoodLevelChangeEvent event) {
-        if (this.dataCenter.isInGodMode(event.getEntity().getUniqueId())) {
-            event.setCancelled(true);
+    public void onFoodLevelChange(@NotNull FoodLevelChangeEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            if (player.getFoodLevel() > event.getFoodLevel()) {
+                if (this.dataCenter.isInGodMode(player.getUniqueId())) {
+                    event.setCancelled(true);
+                }
+            }
         }
     }
 

@@ -90,21 +90,19 @@ public class CmdQuery implements CommandExecutor, TabCompleter {
 
         switch (args[1].toLowerCase()) {
 
-            case "canfly":
-            case "mayfly":
-            case "fly":
+            case "canfly": {
                 result = affectedPlayer.getAllowFlight();
                 break;
-            case "gamemode":
-            case "gm":
+            }
+            case "gamemode": {
                 result = affectedPlayer.getGameMode();
                 break;
-            case "godmode":
-            case "god":
+            }
+            case "godmode": {
                 result = affectedPlayer.hasMetadata("GodMode") && affectedPlayer.getMetadata("GodMode").get(0).asBoolean();
                 break;
-            case "location":
-            case "loc":
+            }
+            case "location": {
                 Location l = affectedPlayer.getLocation();
                 l.setX(l.getBlockX());
                 l.setY(l.getBlockY());
@@ -113,34 +111,39 @@ public class CmdQuery implements CommandExecutor, TabCompleter {
                 l.setPitch(Math.round(l.getPitch()));
                 result = l;
                 break;
-            case "world":
+            }
+            case "world": {
                 result = affectedPlayer.getWorld().getName();
                 break;
-            case "flyspeed":
-            case "flightspeed":
+            }
+            case "flightspeed": {
                 result = affectedPlayer.getFlySpeed();
                 break;
-            case "walkspeed":
+            }
+            case "walkspeed": {
                 result = affectedPlayer.getWalkSpeed();
                 break;
-            case "hp":
-            case "health":
+            }
+            case "health": {
                 result = affectedPlayer.getHealth();
                 break;
-            case "saturation":
+            }
+            case "saturation": {
                 result = affectedPlayer.getSaturation();
                 break;
-            case "activepotioneffects":
-            case "potioneffects":
+            }
+            case "potioneffects": {
                 result = affectedPlayer.getActivePotionEffects();
                 break;
-            case "scoreboardtags":
-            case "tags":
+            }
+            case "scoreboardtags": {
                 result = affectedPlayer.getScoreboardTags();
                 break;
-            case "ip":
+            }
+            case "ip": {
                 result = affectedPlayer.getAddress();
                 break;
+            }
         }
 
         sender.sendMessage("Player: " + affectedPlayer.getName() + ", Query: \"" + query + "\", Result: " + result);

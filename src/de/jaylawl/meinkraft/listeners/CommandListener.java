@@ -14,12 +14,11 @@ public class CommandListener implements Listener {
     }
 
     @EventHandler
-    public void event(PlayerCommandPreprocessEvent event) {
+    public void onCommand(PlayerCommandPreprocessEvent event) {
 
         if (!event.getPlayer().hasPermission("mk.plugins")) {
-
-            List<String> blockedCmds = Meinkraft.inst().getConfig().getStringList("Modules.CommandBlocker.BlockedCommands");
-            if (!blockedCmds.isEmpty() && blockedCmds.contains(event.getMessage())) {
+            List<String> blockedCommands = Meinkraft.inst().getConfig().getStringList("Modules.CommandBlocker.BlockedCommands");
+            if (!blockedCommands.isEmpty() && blockedCommands.contains(event.getMessage())) {
                 event.setCancelled(true);
                 if (Meinkraft.inst().getConfig().getBoolean("Modules.CommandBlocker.SendFeedback", true)) {
                     MessagingUtil.noPermission(event.getPlayer());

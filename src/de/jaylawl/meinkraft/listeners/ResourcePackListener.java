@@ -15,7 +15,7 @@ public class ResourcePackListener implements Listener {
     }
 
     @EventHandler
-    public void event(PlayerResourcePackStatusEvent event) {
+    public void onResourcePackStatus(PlayerResourcePackStatusEvent event) {
 
         FileConfiguration config = Meinkraft.inst().getConfig();
         Player p = event.getPlayer();

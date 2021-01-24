@@ -12,7 +12,7 @@ public class JoinListener implements Listener {
     }
 
     @EventHandler
-    public void event(PlayerJoinEvent event) {
+    public void onJoin(PlayerJoinEvent event) {
         FileConfiguration config = Meinkraft.inst().getConfig();
         String downloadURL = config.getString("Modules.ResourcePackHandler.Link", "");
         String packHash = config.getString("Modules.ResourcePackHandler.Hash", "");

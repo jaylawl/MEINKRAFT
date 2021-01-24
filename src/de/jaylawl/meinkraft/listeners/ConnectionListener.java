@@ -15,7 +15,7 @@ public class ConnectionListener implements Listener {
     }
 
     @EventHandler
-    public void event(PlayerLoginEvent event) {
+    public void onLogin(PlayerLoginEvent event) {
 
         String pn = event.getPlayer().getName();
         FileConfiguration config = Meinkraft.inst().getConfig();

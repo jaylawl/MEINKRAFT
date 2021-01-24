@@ -14,37 +14,36 @@ import org.jetbrains.annotations.NotNull;
 public class CmdHeal implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
-            sender.sendMessage("§cInsufficient permission");
+        if (!CmdPermission.hasAny(commandSender, label)) {
+            commandSender.sendMessage("§cInsufficient permission");
             return true;
         }
 
         Player affectedPlayer;
-        boolean senderEqualsAffected = false;
 
-        if (args.length < 1) {
-            if (sender instanceof Player) {
-                affectedPlayer = (Player) sender;
+        if (arguments.length < 1) {
+            if (commandSender instanceof Player) {
+                affectedPlayer = (Player) commandSender;
             } else {
-                MessagingUtil.genericError(sender, "§cMissing player argument");
+                MessagingUtil.genericError(commandSender, "§cMissing player argument");
                 return true;
             }
         } else {
-            affectedPlayer = Bukkit.getPlayer(args[0]);
+            affectedPlayer = Bukkit.getPlayer(arguments[0]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[0], "is not an online player");
                 return true;
             }
         }
 
-        if (sender instanceof Player && sender == affectedPlayer) {
-            if (!CmdPermission.hasOthers(sender, label)) {
-                MessagingUtil.noPermissionOthers(sender);
+        boolean senderEqualsAffected = commandSender == affectedPlayer;
+        if (commandSender != affectedPlayer) {
+            if (!CmdPermission.hasOthers(commandSender, label)) {
+                MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
-            senderEqualsAffected = true;
         }
 
         AttributeInstance maxHealth = affectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH);
@@ -53,7 +52,7 @@ public class CmdHeal implements CommandExecutor {
         affectedPlayer.setSaturation(1f);
         affectedPlayer.setFoodLevel(20);
 
-        MessagingUtil.feedback(sender, "Fully healed player " + affectedPlayer.getName());
+        MessagingUtil.feedback(commandSender, "Fully healed player " + affectedPlayer.getName());
         if (!senderEqualsAffected) {
             MessagingUtil.notifyPlayer(affectedPlayer, "You've been rejuvenated by a wizard");
         }

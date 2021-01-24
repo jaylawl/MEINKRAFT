@@ -17,13 +17,13 @@ import java.util.List;
 public class CmdInvsee implements CommandExecutor, TabCompleter {
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
+        if (!CmdPermission.hasAny(commandSender, label)) {
             return Collections.emptyList();
         }
 
-        int argN = TabHelper.getArgNumber(args);
+        int argN = TabHelper.getArgNumber(arguments);
         List<String> completions = new ArrayList<>();
 
         switch (argN) {
@@ -39,34 +39,34 @@ public class CmdInvsee implements CommandExecutor, TabCompleter {
                 return Collections.emptyList();
         }
 
-        return TabHelper.sortedCompletions(args[argN - 1], completions);
+        return TabHelper.sortedCompletions(arguments[argN - 1], completions);
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
-            MessagingUtil.noPermission(sender);
+        if (!CmdPermission.hasAny(commandSender, label)) {
+            MessagingUtil.noPermission(commandSender);
             return true;
-        } else if (sender instanceof ConsoleCommandSender) {
-            MessagingUtil.ingameExclusive(sender);
+        } else if (commandSender instanceof ConsoleCommandSender) {
+            MessagingUtil.ingameExclusive(commandSender);
             return true;
         }
 
-        Player player = (Player) sender;
+        Player player = (Player) commandSender;
         Player affectedPlayer;
 
-        if (args.length == 0) {
+        if (arguments.length == 0) {
             affectedPlayer = player;
         } else {
-            affectedPlayer = Bukkit.getPlayer(args[0]);
+            affectedPlayer = Bukkit.getPlayer(arguments[0]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[0], "is not an online player");
                 return true;
             }
         }
 
-        switch (args.length > 1 ? args[1].toLowerCase() : "") {
+        switch (arguments.length > 1 ? arguments[1].toLowerCase() : "") {
             case "":
             case "inventory":
             case "inv":
@@ -82,7 +82,7 @@ public class CmdInvsee implements CommandExecutor, TabCompleter {
                 break;
             }
             default: {
-                MessagingUtil.invalidArguments(sender, args[1], "is not a valid inventory type");
+                MessagingUtil.invalidArguments(commandSender, arguments[1], "is not a valid inventory type");
                 return true;
             }
         }

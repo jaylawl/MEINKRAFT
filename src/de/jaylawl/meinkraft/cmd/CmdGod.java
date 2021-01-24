@@ -21,41 +21,41 @@ public class CmdGod implements CommandExecutor {
     //
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
-            MessagingUtil.noPermission(sender);
+        if (!CmdPermission.hasAny(commandSender, label)) {
+            MessagingUtil.noPermission(commandSender);
             return true;
         }
 
         Player affectedPlayer;
 
-        if (args.length < 1) {
-            if (sender instanceof Player) {
-                affectedPlayer = (Player) sender;
+        if (arguments.length < 1) {
+            if (commandSender instanceof Player) {
+                affectedPlayer = (Player) commandSender;
             } else {
-                MessagingUtil.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(commandSender, "Missing player argument");
                 return true;
             }
         } else {
-            affectedPlayer = Bukkit.getPlayer(args[0]);
+            affectedPlayer = Bukkit.getPlayer(arguments[0]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[0], "is not an online player");
                 return true;
             }
         }
 
-        boolean senderEqualsAffected = sender == affectedPlayer;
+        boolean senderEqualsAffected = commandSender == affectedPlayer;
         if (!senderEqualsAffected) {
-            if (!CmdPermission.hasOthers(sender, label)) {
-                MessagingUtil.noPermissionOthers(sender);
+            if (!CmdPermission.hasOthers(commandSender, label)) {
+                MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
         }
 
         boolean toggledGodModeState = this.dataCenter.toggleGodMode(affectedPlayer.getUniqueId());
 
-        MessagingUtil.feedback(sender, "Set god mode of " + affectedPlayer.getName() + " to " + toggledGodModeState);
+        MessagingUtil.feedback(commandSender, "Set god mode of " + affectedPlayer.getName() + " to " + toggledGodModeState);
         if (!senderEqualsAffected) {
             MessagingUtil.notifyPlayer(affectedPlayer, toggledGodModeState ? "A wizard has turned you into a god" : "A wizard has turned you back into a mortal");
         }

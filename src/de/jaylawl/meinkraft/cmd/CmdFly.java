@@ -12,41 +12,40 @@ import org.jetbrains.annotations.NotNull;
 public class CmdFly implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
-            MessagingUtil.noPermission(sender);
+        if (!CmdPermission.hasAny(commandSender, label)) {
+            MessagingUtil.noPermission(commandSender);
             return true;
         }
 
         Player affectedPlayer;
-        boolean senderEqualsAffected = false;
 
-        if (args.length == 0) {
-            if (sender instanceof Player) {
-                affectedPlayer = (Player) sender;
+        if (arguments.length == 0) {
+            if (commandSender instanceof Player) {
+                affectedPlayer = (Player) commandSender;
             } else {
-                MessagingUtil.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(commandSender, "Missing player argument");
                 return true;
             }
         } else {
-            affectedPlayer = Bukkit.getPlayer(args[0]);
+            affectedPlayer = Bukkit.getPlayer(arguments[0]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[0], "is not an online player");
                 return true;
             }
         }
 
-        if (sender instanceof Player && sender == affectedPlayer) {
-            senderEqualsAffected = true;
-            if (!CmdPermission.hasOthers(sender, label)) {
-                MessagingUtil.noPermissionOthers(sender);
+        boolean senderEqualsAffected = commandSender == affectedPlayer;
+        if (commandSender != affectedPlayer) {
+            if (!CmdPermission.hasOthers(commandSender, label)) {
+                MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
         }
 
         affectedPlayer.setAllowFlight(!affectedPlayer.getAllowFlight());
-        sender.sendMessage("Set flight mode of " + affectedPlayer.getName() + " to " + affectedPlayer.getAllowFlight());
+        commandSender.sendMessage("Set flight mode of " + affectedPlayer.getName() + " to " + affectedPlayer.getAllowFlight());
         if (!senderEqualsAffected) {
             if (affectedPlayer.getAllowFlight()) {
                 MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has granted you flight powers");

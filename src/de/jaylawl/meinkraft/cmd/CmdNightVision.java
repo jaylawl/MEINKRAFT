@@ -34,34 +34,34 @@ public class CmdNightVision implements CommandExecutor {
     //
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
-            MessagingUtil.noPermission(sender);
+        if (!CmdPermission.hasAny(commandSender, label)) {
+            MessagingUtil.noPermission(commandSender);
             return true;
         }
 
         Player affectedPlayer;
 
-        if (args.length == 0) {
-            if (sender instanceof Player) {
-                affectedPlayer = (Player) sender;
+        if (arguments.length == 0) {
+            if (commandSender instanceof Player) {
+                affectedPlayer = (Player) commandSender;
             } else {
-                MessagingUtil.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(commandSender, "Missing player argument");
                 return true;
             }
         } else {
-            affectedPlayer = Bukkit.getPlayer(args[0]);
+            affectedPlayer = Bukkit.getPlayer(arguments[0]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[0], "is not an online player");
                 return true;
             }
         }
 
-        boolean senderEqualsAffected = sender == affectedPlayer;
+        boolean senderEqualsAffected = commandSender == affectedPlayer;
         if (!senderEqualsAffected) {
-            if (!CmdPermission.hasOthers(sender, label)) {
-                MessagingUtil.noPermissionOthers(sender);
+            if (!CmdPermission.hasOthers(commandSender, label)) {
+                MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
         }
@@ -86,13 +86,13 @@ public class CmdNightVision implements CommandExecutor {
                 affectedPlayer.addPotionEffect(priorNightVisionEffect);
                 this.priorNightVisionEffects.remove(affectedPlayerUniqueId);
             }
-            sender.sendMessage("Removed \"permanent\" night vision from " + affectedPlayer.getName());
+            commandSender.sendMessage("Removed \"permanent\" night vision from " + affectedPlayer.getName());
             if (!senderEqualsAffected) {
                 MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has cast away your permanent night vision ability");
             }
         } else {
             affectedPlayer.addPotionEffect(PERMANENT_NIGHT_VISION);
-            sender.sendMessage("Gave \"permanent\" night vision to " + affectedPlayer.getName());
+            commandSender.sendMessage("Gave \"permanent\" night vision to " + affectedPlayer.getName());
             if (!senderEqualsAffected) {
                 MessagingUtil.notifyPlayer(affectedPlayer, "A wizard made you drink a cauldron of night vision potion");
             }

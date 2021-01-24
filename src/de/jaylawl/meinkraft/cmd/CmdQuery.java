@@ -21,13 +21,13 @@ import java.util.List;
 public class CmdQuery implements CommandExecutor, TabCompleter {
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
+        if (!CmdPermission.hasAny(commandSender, label)) {
             return Collections.emptyList();
         }
 
-        int argN = TabHelper.getArgNumber(args);
+        int argN = TabHelper.getArgNumber(arguments);
         List<String> completions = new ArrayList<>();
 
         switch (argN) {
@@ -56,39 +56,39 @@ public class CmdQuery implements CommandExecutor, TabCompleter {
                 return Collections.emptyList();
         }
 
-        return TabHelper.sortedCompletions(args[argN - 1], completions);
+        return TabHelper.sortedCompletions(arguments[argN - 1], completions);
 
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
-            MessagingUtil.noPermission(sender);
+        if (!CmdPermission.hasAny(commandSender, label)) {
+            MessagingUtil.noPermission(commandSender);
             return true;
         }
 
         Player affectedPlayer;
 
-        if (args.length < 1) {
-            MessagingUtil.genericError(sender, "Missing player argument");
+        if (arguments.length < 1) {
+            MessagingUtil.genericError(commandSender, "Missing player argument");
             return true;
         } else {
-            affectedPlayer = Bukkit.getPlayer(args[0]);
+            affectedPlayer = Bukkit.getPlayer(arguments[0]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[0], "is not an online player");
                 return true;
             }
         }
-        if (args.length < 2) {
-            MessagingUtil.genericError(sender, "Missing query argument");
+        if (arguments.length < 2) {
+            MessagingUtil.genericError(commandSender, "Missing query argument");
             return true;
         }
 
-        String query = args[1].toLowerCase();
+        String query = arguments[1].toLowerCase();
         Object result = "?";
 
-        switch (args[1].toLowerCase()) {
+        switch (arguments[1].toLowerCase()) {
 
             case "canfly": {
                 result = affectedPlayer.getAllowFlight();
@@ -146,7 +146,7 @@ public class CmdQuery implements CommandExecutor, TabCompleter {
             }
         }
 
-        sender.sendMessage("Player: " + affectedPlayer.getName() + ", Query: \"" + query + "\", Result: " + result);
+        commandSender.sendMessage("Player: " + affectedPlayer.getName() + ", Query: \"" + query + "\", Result: " + result);
 
         return true;
     }

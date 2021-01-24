@@ -12,26 +12,26 @@ import org.jetbrains.annotations.NotNull;
 public class CmdPing implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
         Player affectedPlayer;
 
-        if (args.length == 0) {
-            if (sender instanceof Player) {
-                affectedPlayer = (Player) sender;
+        if (arguments.length == 0) {
+            if (commandSender instanceof Player) {
+                affectedPlayer = (Player) commandSender;
                 MessagingUtil.notifyPlayer(affectedPlayer, "A wizard responded within " + affectedPlayer.spigot().getPing() + " ms");
             } else {
-                MessagingUtil.genericError(sender, "§cMissing player argument");
+                MessagingUtil.genericError(commandSender, "Missing player argument");
             }
         } else {
-            affectedPlayer = Bukkit.getPlayer(args[0]);
+            affectedPlayer = Bukkit.getPlayer(arguments[0]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[0], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[0], "is not an online player");
             } else {
-                if (!CmdPermission.hasOthers(sender, label)) {
-                    MessagingUtil.noPermissionOthers(sender);
+                if (!CmdPermission.hasOthers(commandSender, label)) {
+                    MessagingUtil.noPermissionOthers(commandSender);
                 } else {
-                    MessagingUtil.feedback(sender, "Ping of " + affectedPlayer.getName() + ": " + affectedPlayer.spigot().getPing() + " ms");
+                    MessagingUtil.feedback(commandSender, "Ping of " + affectedPlayer.getName() + ": " + affectedPlayer.spigot().getPing() + " ms");
                 }
             }
         }

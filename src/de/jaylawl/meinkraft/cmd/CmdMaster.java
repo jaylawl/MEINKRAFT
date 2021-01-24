@@ -13,19 +13,19 @@ import org.jetbrains.annotations.NotNull;
 public class CmdMaster implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, "admin")) {
-            MessagingUtil.noPermission(sender);
+        if (!CmdPermission.hasAny(commandSender, "admin")) {
+            MessagingUtil.noPermission(commandSender);
             return true;
         }
 
         String mainArg;
 
-        if (args.length == 0) {
+        if (arguments.length == 0) {
             mainArg = "help";
         } else {
-            mainArg = args[0];
+            mainArg = arguments[0];
         }
 
         switch (mainArg) {
@@ -33,18 +33,18 @@ public class CmdMaster implements CommandExecutor {
             case "reload":
             case "r":
                 Meinkraft.inst().reloadConfig();
-                MessagingUtil.feedback(sender, "Successfully reloaded MEINKRAFT/config.yml");
+                MessagingUtil.feedback(commandSender, "Successfully reloaded MEINKRAFT/config.yml");
                 break;
 
             case "help":
             case "h":
             case "?":
             default:
-                if (!(sender instanceof Player)) {
-                    MessagingUtil.ingameExclusive(sender);
+                if (!(commandSender instanceof Player)) {
+                    MessagingUtil.ingameExclusive(commandSender);
                     return true;
                 }
-                ((Player) sender).openBook(HelpBook.make());
+                ((Player) commandSender).openBook(HelpBook.make());
                 break;
 
         }

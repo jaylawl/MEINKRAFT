@@ -22,16 +22,16 @@ import java.util.List;
 public class CmdGamemode implements CommandExecutor, TabCompleter {
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
+        if (!CmdPermission.hasAny(commandSender, label)) {
             return Collections.emptyList();
         }
 
-        int argN = TabHelper.getArgNumber(args);
+        int argumentNumber = TabHelper.getArgNumber(arguments);
         List<String> completions = new ArrayList<>();
 
-        switch (argN) {
+        switch (argumentNumber) {
             case 1:
                 for (GameMode gm : GameMode.values()) {
                     completions.add(gm.toString().toLowerCase());
@@ -47,26 +47,26 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
                 return Collections.emptyList();
         }
 
-        return TabHelper.sortedCompletions(args[argN - 1], completions);
+        return TabHelper.sortedCompletions(arguments[argumentNumber - 1], completions);
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
-            MessagingUtil.noPermission(sender);
+        if (!CmdPermission.hasAny(commandSender, label)) {
+            MessagingUtil.noPermission(commandSender);
             return true;
         }
 
         GameMode gameMode = null;
         Player affectedPlayer;
 
-        if (args.length == 0) {
-            sender.sendMessage(ChatColor.GREEN + "/gm " + ChatColor.RED + "<gamemode> " + ChatColor.GRAY + "[player]");
+        if (arguments.length == 0) {
+            commandSender.sendMessage(ChatColor.GREEN + "/gm " + ChatColor.RED + "<gamemode> " + ChatColor.GRAY + "[player]");
             return true;
         } else {
-            if (args[0].matches("(\\d+)")) {
-                switch (Integer.parseInt(args[0])) {
+            if (arguments[0].matches("(\\d+)")) {
+                switch (Integer.parseInt(arguments[0])) {
                     case 0:
                         gameMode = GameMode.SURVIVAL;
                         break;
@@ -80,49 +80,49 @@ public class CmdGamemode implements CommandExecutor, TabCompleter {
                         gameMode = GameMode.SPECTATOR;
                         break;
                     default:
-                        MessagingUtil.genericError(sender, "Numeric gamemode value must be between 0 and 3 inclusive");
+                        MessagingUtil.genericError(commandSender, "Numeric gamemode value must be between 0 and 3 inclusive");
                         return true;
                 }
             } else {
                 for (GameMode gm : GameMode.values()) {
-                    if (gm.toString().equals(args[0].toUpperCase())) {
+                    if (gm.toString().equals(arguments[0].toUpperCase())) {
                         gameMode = gm;
                         break;
                     }
                 }
                 if (gameMode == null) {
-                    MessagingUtil.invalidArguments(sender, args[0], "is not a valid gamemode");
+                    MessagingUtil.invalidArguments(commandSender, arguments[0], "is not a valid gamemode");
                     return true;
                 }
             }
         }
 
-        if (args.length > 1) {
-            affectedPlayer = Bukkit.getPlayer(args[1]);
+        if (arguments.length > 1) {
+            affectedPlayer = Bukkit.getPlayer(arguments[1]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[1], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[1], "is not an online player");
                 return true;
             }
         } else {
-            if (sender instanceof Player) {
-                affectedPlayer = (Player) sender;
+            if (commandSender instanceof Player) {
+                affectedPlayer = (Player) commandSender;
             } else {
-                MessagingUtil.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(commandSender, "Missing player argument");
                 return true;
             }
         }
 
-        boolean senderEqualsAffected = sender == affectedPlayer;
+        boolean senderEqualsAffected = commandSender == affectedPlayer;
         if (!senderEqualsAffected) {
-            if (!CmdPermission.hasOthers(sender, label)) {
-                MessagingUtil.noPermissionOthers(sender);
+            if (!CmdPermission.hasOthers(commandSender, label)) {
+                MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
         }
 
         affectedPlayer.setGameMode(gameMode);
         String formattedGameMode = affectedPlayer.getGameMode().toString().toLowerCase();
-        MessagingUtil.feedback(sender, "Set game mode of " + affectedPlayer.getName() + " to " + formattedGameMode);
+        MessagingUtil.feedback(commandSender, "Set game mode of " + affectedPlayer.getName() + " to " + formattedGameMode);
         if (!senderEqualsAffected) {
             MessagingUtil.notifyPlayer(affectedPlayer, "A wizard set your game mode to " + formattedGameMode);
         }

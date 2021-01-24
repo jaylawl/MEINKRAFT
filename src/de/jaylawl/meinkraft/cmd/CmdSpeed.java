@@ -20,13 +20,13 @@ import java.util.List;
 public class CmdSpeed implements CommandExecutor, TabCompleter {
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
+        if (!CmdPermission.hasAny(commandSender, label)) {
             return Collections.emptyList();
         }
 
-        int argN = TabHelper.getArgNumber(args);
+        int argN = TabHelper.getArgNumber(arguments);
         List<String> completions = new ArrayList<>();
 
         switch (argN) {
@@ -34,7 +34,7 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
                 completions = Arrays.asList("flight", "walk");
                 break;
             case 2:
-                completions = Collections.singletonList("[double or \"reset\"]");
+                completions = Collections.singletonList("[value or \"reset\"]");
                 break;
             case 3:
                 for (Player p : Bukkit.getOnlinePlayers()) {
@@ -45,52 +45,51 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
                 return Collections.emptyList();
         }
 
-        return TabHelper.sortedCompletions(args[argN - 1], completions);
+        return TabHelper.sortedCompletions(arguments[argN - 1], completions);
 
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
-            MessagingUtil.noPermission(sender);
+        if (!CmdPermission.hasAny(commandSender, label)) {
+            MessagingUtil.noPermission(commandSender);
             return true;
         }
 
         Player affectedPlayer;
-        boolean senderEqualsAffected = false;
 
-        if (args.length < 1) {
-            MessagingUtil.genericError(sender, "Missing type argument");
+        if (arguments.length < 1) {
+            MessagingUtil.genericError(commandSender, "Missing type argument");
             return true;
-        } else if (args.length < 2) {
-            MessagingUtil.genericError(sender, "Missing value argument");
+        } else if (arguments.length < 2) {
+            MessagingUtil.genericError(commandSender, "Missing value argument");
             return true;
-        } else if (args.length < 3) {
-            if (sender instanceof Player) {
-                affectedPlayer = (Player) sender;
+        } else if (arguments.length < 3) {
+            if (commandSender instanceof Player) {
+                affectedPlayer = (Player) commandSender;
             } else {
-                MessagingUtil.genericError(sender, "Missing player argument");
+                MessagingUtil.genericError(commandSender, "Missing player argument");
                 return true;
             }
         } else {
-            affectedPlayer = Bukkit.getPlayer(args[2]);
+            affectedPlayer = Bukkit.getPlayer(arguments[2]);
             if (affectedPlayer == null) {
-                MessagingUtil.invalidArguments(sender, args[2], "is not an online player");
+                MessagingUtil.invalidArguments(commandSender, arguments[2], "is not an online player");
                 return true;
             }
         }
 
-        if (sender instanceof Player && sender == affectedPlayer) {
-            senderEqualsAffected = true;
-            if (!CmdPermission.hasOthers(sender, label)) {
-                MessagingUtil.noPermissionOthers(sender);
+        boolean senderEqualsAffected = commandSender == affectedPlayer;
+        if (commandSender != affectedPlayer) {
+            if (!CmdPermission.hasOthers(commandSender, label)) {
+                MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
         }
 
         String type;
-        switch (args[0].toLowerCase()) {
+        switch (arguments[0].toLowerCase()) {
             case "flight":
             case "flying":
             case "fly":
@@ -104,17 +103,17 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
                 type = "walk";
                 break;
             default:
-                MessagingUtil.invalidArguments(sender, args[0], "unknown type; must be \"flight\" or \"walk\"");
+                MessagingUtil.invalidArguments(commandSender, arguments[0], "unknown type; must be \"flight\" or \"walk\"");
                 return true;
         }
 
         float value;
-        if (args[1].toLowerCase().equals("reset") || args[1].toLowerCase().equals("r")) {
+        if (arguments[1].toLowerCase().equals("reset") || arguments[1].toLowerCase().equals("r")) {
             value = type.equals("flight") ? 0.1f : 0.2f;
-        } else if (args[1].matches("\\d*.*\\d*")) {
-            value = Float.parseFloat(args[1]);
+        } else if (arguments[1].matches("\\d*.*\\d*")) {
+            value = Float.parseFloat(arguments[1]);
         } else {
-            MessagingUtil.invalidArguments(sender, args[1], "unknown value; must be a number or \"reset\"");
+            MessagingUtil.invalidArguments(commandSender, arguments[1], "unknown value; must be a number or \"reset\"");
             return true;
         }
         value = Math.min(1f, value);
@@ -125,7 +124,7 @@ public class CmdSpeed implements CommandExecutor, TabCompleter {
         } else {
             affectedPlayer.setWalkSpeed(value);
         }
-        MessagingUtil.feedback(sender, "Set " + type + " speed of " + affectedPlayer.getName() + " to " + value);
+        MessagingUtil.feedback(commandSender, "Set " + type + " speed of " + affectedPlayer.getName() + " to " + value);
         if (!senderEqualsAffected) {
             MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has set your " + type + " speed to " + value);
         }

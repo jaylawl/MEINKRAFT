@@ -20,16 +20,16 @@ import java.util.List;
 public class CmdWorld implements CommandExecutor, TabCompleter {
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(sender, label)) {
+        if (!CmdPermission.hasAny(commandSender, label)) {
             return Collections.emptyList();
         }
 
-        int argN = TabHelper.getArgNumber(args);
+        int argumentNumber = TabHelper.getArgNumber(arguments);
         List<String> completions = new ArrayList<>();
 
-        switch (argN) {
+        switch (argumentNumber) {
             case 1:
                 for (World w : Bukkit.getWorlds()) {
                     completions.add(w.getName());
@@ -44,7 +44,7 @@ public class CmdWorld implements CommandExecutor, TabCompleter {
                 return Collections.emptyList();
         }
 
-        return TabHelper.sortedCompletions(args[argN - 1], completions);
+        return TabHelper.sortedCompletions(arguments[argumentNumber - 1], completions);
 
     }
 
@@ -57,7 +57,6 @@ public class CmdWorld implements CommandExecutor, TabCompleter {
         }
 
         Player affectedPlayer;
-        boolean senderEqualsAffected = false;
         World world;
 
         if (args.length < 1) {
@@ -85,8 +84,8 @@ public class CmdWorld implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if (sender instanceof Player && sender == affectedPlayer) {
-            senderEqualsAffected = true;
+        boolean senderEqualsAffected = sender == affectedPlayer;
+        if (sender != affectedPlayer) {
             if (!CmdPermission.hasOthers(sender, label)) {
                 MessagingUtil.noPermissionOthers(sender);
                 return true;

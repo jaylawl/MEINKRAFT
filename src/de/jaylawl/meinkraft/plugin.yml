@@ -28,5 +28,7 @@ commands:
     permission: "mk.query"
   speed:
     permission: "mk.speed"
+  stat:
+    permission: "mk.stat"
   world:
     permission: "mk.world"

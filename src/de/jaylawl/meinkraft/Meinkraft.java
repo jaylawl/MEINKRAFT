@@ -121,6 +121,15 @@ public class Meinkraft extends JavaPlugin {
                 this.enabledCommands++;
             }
         }
+        if (config.getBoolean("Commands.stat", true)) {
+            PluginCommand statCmd = getCommand("stat");
+            if (statCmd != null) {
+                CmdStatistic cmdStatistic = new CmdStatistic();
+                statCmd.setExecutor(cmdStatistic);
+                statCmd.setTabCompleter(cmdStatistic);
+                this.enabledCommands++;
+            }
+        }
         if (config.getBoolean("Commands.world", true)) {
             PluginCommand worldCmd = getCommand("world");
             if (worldCmd != null) {

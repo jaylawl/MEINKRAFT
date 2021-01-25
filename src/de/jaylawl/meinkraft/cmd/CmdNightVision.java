@@ -4,7 +4,6 @@ import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CmdNightVision implements CommandExecutor {
+public class CmdNightVision implements CmdMeinkraft {
 
     private final static short CUSTOM_EFFECT_IDENTIFIER = 214;
     private final static PotionEffect PERMANENT_NIGHT_VISION = new PotionEffect(

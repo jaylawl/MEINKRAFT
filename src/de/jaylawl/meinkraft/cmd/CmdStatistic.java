@@ -9,9 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class CmdStatistic implements TabCompleter, CommandExecutor {
+public class CmdStatistic implements CmdMeinkraft {
 
     private final List<String> statisticStrings = new ArrayList<>();
     private final HashMap<Statistic.Type, List<String>> subStatisticStrings = new HashMap<>();

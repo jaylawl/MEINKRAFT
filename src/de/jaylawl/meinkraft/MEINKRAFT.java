@@ -1,18 +1,20 @@
 package de.jaylawl.meinkraft;
 
 import de.jaylawl.meinkraft.cmd.*;
-import de.jaylawl.meinkraft.listeners.*;
+import de.jaylawl.meinkraft.listener.bukkit.*;
+import de.jaylawl.meinkraft.settings.FileUtil;
+import de.jaylawl.meinkraft.settings.Settings;
 import de.jaylawl.meinkraft.util.DataCenter;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
-public class Meinkraft extends JavaPlugin {
+public class MEINKRAFT extends JavaPlugin {
 
-    private static Meinkraft INSTANCE;
+    private static MEINKRAFT INSTANCE;
+    private Settings settings;
     private DataCenter dataCenter;
     private int enabledCommands = 0;
     private int enabledModules = 0;
@@ -21,41 +23,38 @@ public class Meinkraft extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        INSTANCE = this;
-
-        this.dataCenter = new DataCenter();
-
-        this.saveDefaultConfig();
-
         Logger logger = getLogger();
         PluginManager pluginManager = getServer().getPluginManager();
-        FileConfiguration config = getConfig();
 
-        if (config.getBoolean("Modules.CommandBlocker.Enabled", true)) {
+        INSTANCE = this;
+        reload();
+        this.dataCenter = new DataCenter();
+
+        if (this.settings.getCommandBlocker().isEnabled()) {
             pluginManager.registerEvents(new CommandListener(), this);
             this.enabledModules++;
             this.enabledListeners++;
         }
-        if (config.getBoolean("Modules.UnsafePlayerBlocker.Enabled", false)) {
+        if (this.settings.getUnsafePlayerBlocker().isEnabled()) {
             pluginManager.registerEvents(new ConnectionListener(), this);
             this.enabledModules++;
             this.enabledListeners++;
         }
-        if (config.getBoolean("Modules.ResourcePackHandler.Enabled", false)) {
+        if (this.settings.getResourcePackHandler().isEnabled()) {
             pluginManager.registerEvents(new JoinListener(), this);
             pluginManager.registerEvents(new ResourcePackListener(), this);
             this.enabledModules++;
             this.enabledListeners = (this.enabledListeners + 2);
         }
 
-        if (config.getBoolean("Commands.fly", true)) {
+        if (this.settings.getEnableCommand(CmdFly.class)) {
             PluginCommand flyCmd = getCommand("fly");
             if (flyCmd != null) {
                 flyCmd.setExecutor(new CmdFly());
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.gm", true)) {
+        if (this.settings.getEnableCommand(CmdGamemode.class)) {
             PluginCommand gmCmd = getCommand("gm");
             if (gmCmd != null) {
                 CmdGamemode cmdGamemode = new CmdGamemode();
@@ -64,7 +63,7 @@ public class Meinkraft extends JavaPlugin {
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.god", true)) {
+        if (this.settings.getEnableCommand(CmdGod.class)) {
             PluginCommand godCmd = getCommand("god");
             if (godCmd != null) {
                 godCmd.setExecutor(new CmdGod(this.dataCenter));
@@ -73,14 +72,14 @@ public class Meinkraft extends JavaPlugin {
                 this.enabledListeners++;
             }
         }
-        if (config.getBoolean("Commands.heal", true)) {
+        if (this.settings.getEnableCommand(CmdHeal.class)) {
             PluginCommand healCmd = getCommand("heal");
             if (healCmd != null) {
                 healCmd.setExecutor(new CmdHeal());
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.invsee", true)) {
+        if (this.settings.getEnableCommand(CmdInvsee.class)) {
             PluginCommand invseeCmd = getCommand("invsee");
             if (invseeCmd != null) {
                 CmdInvsee cmdInvsee = new CmdInvsee();
@@ -89,21 +88,21 @@ public class Meinkraft extends JavaPlugin {
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.ping", true)) {
+        if (this.settings.getEnableCommand(CmdPing.class)) {
             PluginCommand pingCmd = getCommand("ping");
             if (pingCmd != null) {
                 pingCmd.setExecutor(new CmdPing());
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.nightvision", true)) {
+        if (this.settings.getEnableCommand(CmdNightVision.class)) {
             PluginCommand nightvisionCmd = getCommand("nightvision");
             if (nightvisionCmd != null) {
                 nightvisionCmd.setExecutor(new CmdNightVision());
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.query", true)) {
+        if (this.settings.getEnableCommand(CmdQuery.class)) {
             PluginCommand queryCmd = getCommand("query");
             if (queryCmd != null) {
                 CmdQuery cmdQuery = new CmdQuery();
@@ -112,7 +111,7 @@ public class Meinkraft extends JavaPlugin {
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.speed", true)) {
+        if (this.settings.getEnableCommand(CmdSpeed.class)) {
             PluginCommand speedCmd = getCommand("speed");
             if (speedCmd != null) {
                 CmdSpeed cmdSpeed = new CmdSpeed();
@@ -121,7 +120,7 @@ public class Meinkraft extends JavaPlugin {
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.stat", true)) {
+        if (this.settings.getEnableCommand(CmdStatistic.class)) {
             PluginCommand statCmd = getCommand("stat");
             if (statCmd != null) {
                 CmdStatistic cmdStatistic = new CmdStatistic();
@@ -130,7 +129,7 @@ public class Meinkraft extends JavaPlugin {
                 this.enabledCommands++;
             }
         }
-        if (config.getBoolean("Commands.world", true)) {
+        if (this.settings.getEnableCommand(CmdWorld.class)) {
             PluginCommand worldCmd = getCommand("world");
             if (worldCmd != null) {
                 CmdWorld cmdWorld = new CmdWorld();
@@ -159,14 +158,14 @@ public class Meinkraft extends JavaPlugin {
 
     }
 
-    @Override
-    public void onDisable() {
-    }
-
     //
 
-    public static Meinkraft inst() {
+    public static MEINKRAFT inst() {
         return INSTANCE;
+    }
+
+    public static Settings getSettings() {
+        return INSTANCE.settings;
     }
 
     public static DataCenter getDataCenter() {
@@ -183,6 +182,12 @@ public class Meinkraft extends JavaPlugin {
 
     public static int getEnabledListeners() {
         return INSTANCE.enabledListeners;
+    }
+
+    //
+
+    public void reload() {
+        this.settings = new Settings(FileUtil.getOrCreateConfig());
     }
 
 }

@@ -16,7 +16,6 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Commands:
-
   fly: true
   gm: true
   god: true
@@ -43,16 +42,15 @@ Modules:
 
   UnsafePlayerBlocker:
     Enabled: false
-    ContainingIllegalCharacters:
+    UnsafeCharacters:
       Block: true
-      BlockSpacesOnly: true
       KickMessage:
         - '&c&lConnection rejected by the server'
         - '&4Username contains disallowed character(s)'
         - '&f'
         - '&fUsernames must only contain letters, numbers and underscores'
         - '&fConsider changing your username and rejoin afterwards'
-    NonUniqueUsernames:
+    DuplicateUsernames:
       Block: true
       KickMessage:
         - '&c&lConnection rejected by the server'
@@ -79,8 +77,8 @@ Modules:
     KickOnDecline: true
     KickOnFailure: true
     TicksBeforeKick: 20
-    WhitelistOperators: false
-    WhitelistedUUIDs: []
+    IgnoreOperators: false
+    IgnoredUUIDs: []
     KickMessage:
       - '&c&lResource pack download declined or failed'
       - '&r'

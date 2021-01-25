@@ -1,4 +1,4 @@
-package de.jaylawl.meinkraft.listeners;
+package de.jaylawl.meinkraft.listener.bukkit;
 
 import de.jaylawl.meinkraft.util.DataCenter;
 import org.bukkit.entity.Entity;

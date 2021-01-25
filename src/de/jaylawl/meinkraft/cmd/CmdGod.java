@@ -5,12 +5,11 @@ import de.jaylawl.meinkraft.util.DataCenter;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class CmdGod implements CommandExecutor {
+public class CmdGod implements CmdMeinkraft {
 
     private final DataCenter dataCenter;
 

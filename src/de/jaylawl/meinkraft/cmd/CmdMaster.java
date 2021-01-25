@@ -19,32 +19,33 @@ public class CmdMaster implements CmdMeinkraft {
             return true;
         }
 
-        String mainArg;
+        String mainArgument;
 
         if (arguments.length == 0) {
-            mainArg = "help";
+            mainArgument = "help";
         } else {
-            mainArg = arguments[0];
+            mainArgument = arguments[0];
         }
 
-        switch (mainArg) {
+        switch (mainArgument) {
 
             case "reload":
-            case "r":
-                MEINKRAFT.inst().reload();
-                MessagingUtil.feedback(commandSender, "Successfully reloaded MEINKRAFT/config.yml");
+            case "r": {
+                MEINKRAFT.inst().reload(commandSender);
                 break;
+            }
 
             case "help":
             case "h":
             case "?":
-            default:
+            default: {
                 if (!(commandSender instanceof Player)) {
                     MessagingUtil.ingameExclusive(commandSender);
-                    return true;
+                } else {
+                    ((Player) commandSender).openBook(HelpBook.make());
                 }
-                ((Player) commandSender).openBook(HelpBook.make());
                 break;
+            }
 
         }
 

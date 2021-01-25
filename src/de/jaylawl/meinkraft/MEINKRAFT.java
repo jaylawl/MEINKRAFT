@@ -5,9 +5,13 @@ import de.jaylawl.meinkraft.listener.bukkit.*;
 import de.jaylawl.meinkraft.settings.FileUtil;
 import de.jaylawl.meinkraft.settings.Settings;
 import de.jaylawl.meinkraft.util.DataCenter;
+import de.jaylawl.meinkraft.util.MessagingUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Logger;
 
@@ -27,7 +31,7 @@ public class MEINKRAFT extends JavaPlugin {
         PluginManager pluginManager = getServer().getPluginManager();
 
         INSTANCE = this;
-        reload();
+        reload(Bukkit.getConsoleSender());
         this.dataCenter = new DataCenter();
 
         if (this.settings.getCommandBlocker().isEnabled()) {
@@ -148,9 +152,6 @@ public class MEINKRAFT extends JavaPlugin {
         PluginCommand masterCmd = getCommand("meinkraft");
         if (masterCmd != null) {
             masterCmd.setExecutor(new CmdMaster());
-            logger.info("Enabled " + this.enabledCommands + " command(s)");
-            logger.info("Enabled " + this.enabledModules + " module(s)");
-            logger.info("Enabled " + this.enabledListeners + " listener(s)");
         } else {
             logger.severe("Failed to enable the master command; disabling plugin...");
             pluginManager.disablePlugin(this);
@@ -186,8 +187,9 @@ public class MEINKRAFT extends JavaPlugin {
 
     //
 
-    public void reload() {
+    public void reload(@NotNull CommandSender issuer) {
         this.settings = new Settings(FileUtil.getOrCreateConfig());
+        MessagingUtil.feedback(issuer, "Reloaded MEINKRAFT/meinkraft_settings.yml");
     }
 
 }

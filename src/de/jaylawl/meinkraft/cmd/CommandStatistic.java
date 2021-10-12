@@ -20,12 +20,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class CmdStatistic implements CmdMeinkraft {
+public class CommandStatistic implements CommandMeinkraft {
 
     private final List<String> statisticStrings = new ArrayList<>();
     private final HashMap<Statistic.Type, List<String>> subStatisticStrings = new HashMap<>();
 
-    public CmdStatistic() {
+    public CommandStatistic() {
         for (Statistic statistic : Statistic.values()) {
             String statisticString = statistic.toString().toLowerCase();
             this.statisticStrings.add(statisticString);

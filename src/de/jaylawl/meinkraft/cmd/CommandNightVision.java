@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CmdNightVision implements CmdMeinkraft {
+public class CommandNightVision implements CommandMeinkraft {
 
     private final static short CUSTOM_EFFECT_IDENTIFIER = 214;
     private final static PotionEffect PERMANENT_NIGHT_VISION = new PotionEffect(
@@ -27,7 +27,7 @@ public class CmdNightVision implements CmdMeinkraft {
 
     private final ConcurrentHashMap<UUID, PotionEffect> priorNightVisionEffects = new ConcurrentHashMap<>();
 
-    public CmdNightVision() {
+    public CommandNightVision() {
     }
 
     //

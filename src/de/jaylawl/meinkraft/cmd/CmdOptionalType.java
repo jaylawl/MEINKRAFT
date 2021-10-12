@@ -4,29 +4,29 @@ import org.jetbrains.annotations.NotNull;
 
 public enum CmdOptionalType {
 
-    FLY(CmdFly.class, "fly"),
-    GAMEMODE(CmdGamemode.class, "gm"),
-    GOD(CmdGod.class, "god"),
-    HEAL(CmdHeal.class, "heal"),
-    INVSEE(CmdInvsee.class, "invsee"),
-    NIGHT_VISION(CmdNightVision.class, "nightvision"),
-    PING(CmdPing.class, "ping"),
-    QUERY(CmdQuery.class, "query"),
-    SPEED(CmdSpeed.class, "speed"),
-    STATISTIC(CmdStatistic.class, "stat"),
-    WORLD(CmdWorld.class, "world");
+    FLY(CommandFly.class, "fly"),
+    GAMEMODE(CommandGamemode.class, "gm"),
+    GOD(CommandGod.class, "god"),
+    HEAL(CommandHeal.class, "heal"),
+    INVSEE(CommandInvsee.class, "invsee"),
+    NIGHT_VISION(CommandNightVision.class, "nightvision"),
+    PING(CommandPing.class, "ping"),
+    QUERY(CommandQuery.class, "query"),
+    SPEED(CommandSpeed.class, "speed"),
+    STATISTIC(CommandStatistic.class, "stat"),
+    WORLD(CommandWorld.class, "world");
 
-    private final Class<? extends CmdMeinkraft> clazz;
+    private final Class<? extends CommandMeinkraft> clazz;
     private final String commandLabel;
 
-    CmdOptionalType(Class<? extends CmdMeinkraft> clazz, @NotNull String commandLabel) {
+    CmdOptionalType(Class<? extends CommandMeinkraft> clazz, @NotNull String commandLabel) {
         this.clazz = clazz;
         this.commandLabel = commandLabel;
     }
 
     //
 
-    public @NotNull Class<? extends CmdMeinkraft> getClazz() {
+    public @NotNull Class<? extends CommandMeinkraft> getClazz() {
         return this.clazz;
     }
 

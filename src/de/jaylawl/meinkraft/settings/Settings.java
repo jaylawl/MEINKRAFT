@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Settings {
 
-    private final HashMap<Class<? extends CmdMeinkraft>, Boolean> enabledCommands = new HashMap<>();
+    private final HashMap<Class<? extends CommandMeinkraft>, Boolean> enabledCommands = new HashMap<>();
     private final CommandBlocker commandBlocker;
     private final UnsafePlayerBlocker unsafePlayerBlocker;
     private final ResourcePackHandler resourcePackHandler;
@@ -31,7 +31,7 @@ public class Settings {
 
     //
 
-    public boolean getEnableCommand(@NotNull Class<? extends CmdMeinkraft> clazz) {
+    public boolean getEnableCommand(@NotNull Class<? extends CommandMeinkraft> clazz) {
         return this.enabledCommands.get(clazz);
     }
 

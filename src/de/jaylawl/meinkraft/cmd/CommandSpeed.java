@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CmdSpeed implements CmdMeinkraft {
+public class CommandSpeed implements CommandMeinkraft {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
@@ -122,7 +122,7 @@ public class CmdSpeed implements CmdMeinkraft {
         } else {
             affectedPlayer.setWalkSpeed(value);
         }
-        MessagingUtil.feedback(commandSender, "Set " + type + " speed of " + affectedPlayer.getName() + " to " + value);
+        MessagingUtil.notifyExecutor(commandSender, "Set " + type + " speed of " + affectedPlayer.getName() + " to " + value);
         if (!senderEqualsAffected) {
             MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has set your " + type + " speed to " + value);
         }

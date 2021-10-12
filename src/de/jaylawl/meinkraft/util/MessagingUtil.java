@@ -32,7 +32,7 @@ public class MessagingUtil {
         sender.sendMessage(ChatColor.RED + "\"" + argument + "\" " + message);
     }
 
-    public static void feedback(@NotNull CommandSender sender, @NotNull String message) {
+    public static void notifyExecutor(@NotNull CommandSender sender, @NotNull String message) {
         sender.sendMessage(ChatColor.RESET + message);
     }
 

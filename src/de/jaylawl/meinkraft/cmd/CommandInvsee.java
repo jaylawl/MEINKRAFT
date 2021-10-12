@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CmdInvsee implements CmdMeinkraft {
+public class CommandInvsee implements CommandMeinkraft {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
@@ -69,24 +69,20 @@ public class CmdInvsee implements CmdMeinkraft {
         }
 
         switch (arguments.length > 1 ? arguments[1].toLowerCase() : "") {
-            case "":
-            case "inventory":
-            case "inv":
-            case "i": {
+
+            case "", "inventory", "inv", "i" -> {
                 player.openInventory(affectedPlayer.getInventory());
-                break;
             }
-            case "enderchest":
-            case "endchest":
-            case "echest":
-            case "e": {
+
+            case "enderchest", "endchest", "echest", "e" -> {
                 player.openInventory(affectedPlayer.getEnderChest());
-                break;
             }
-            default: {
+
+            default -> {
                 MessagingUtil.invalidArguments(commandSender, arguments[1], "is not a valid inventory type");
                 return true;
             }
+
         }
 
         return true;

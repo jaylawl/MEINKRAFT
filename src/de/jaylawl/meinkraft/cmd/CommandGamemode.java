@@ -1,6 +1,5 @@
 package de.jaylawl.meinkraft.cmd;
 
-import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
 import net.md_5.bungee.api.ChatColor;
@@ -17,32 +16,50 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CmdGamemode implements CmdMeinkraft {
+public class CommandGamemode implements CommandMeinkraft {
+
+    public static final String PERMISSION_NODE = "mk.gamemode";
+    public static final String PERMISSION_NODE_SELF = "mk.gamemode.self";
+
+    public CommandGamemode() {
+    }
+
+    //
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(commandSender, label)) {
+        boolean permissionAll = commandSender.hasPermission(CommandMaster.PERMISSION_NODE) || commandSender.hasPermission(PERMISSION_NODE);
+        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
+
+        if (!permissionAll && !permissionSelf) {
             return Collections.emptyList();
         }
 
-        int argumentNumber = TabHelper.getArgumentNumber(arguments);
         List<String> completions = new ArrayList<>();
+        int argumentNumber = TabHelper.getArgumentNumber(arguments);
 
         switch (argumentNumber) {
-            case 1:
-                for (GameMode gm : GameMode.values()) {
-                    completions.add(gm.toString().toLowerCase());
+
+            case 1 -> {
+                for (GameMode gameMode : GameMode.values()) {
+                    completions.add(gameMode.toString().toLowerCase());
                 }
                 completions.addAll(Arrays.asList("0", "1", "2", "3"));
-                break;
-            case 2:
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    completions.add(p.getName());
+            }
+
+            case 2 -> {
+                if (permissionAll) {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        completions.add(player.getName());
+                    }
                 }
-                break;
-            default:
+            }
+
+            default -> {
                 return Collections.emptyList();
+            }
+
         }
 
         return TabHelper.sortedCompletions(arguments[argumentNumber - 1], completions);
@@ -51,7 +68,10 @@ public class CmdGamemode implements CmdMeinkraft {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(commandSender, label)) {
+        boolean permissionAll = commandSender.hasPermission(CommandMaster.PERMISSION_NODE) || commandSender.hasPermission(PERMISSION_NODE);
+        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
+
+        if (!permissionAll && !permissionSelf) {
             MessagingUtil.noPermission(commandSender);
             return true;
         }
@@ -65,21 +85,14 @@ public class CmdGamemode implements CmdMeinkraft {
         } else {
             if (arguments[0].matches("(\\d+)")) {
                 switch (Integer.parseInt(arguments[0])) {
-                    case 0:
-                        gameMode = GameMode.SURVIVAL;
-                        break;
-                    case 1:
-                        gameMode = GameMode.CREATIVE;
-                        break;
-                    case 2:
-                        gameMode = GameMode.ADVENTURE;
-                        break;
-                    case 3:
-                        gameMode = GameMode.SPECTATOR;
-                        break;
-                    default:
+                    case 0 -> gameMode = GameMode.SURVIVAL;
+                    case 1 -> gameMode = GameMode.CREATIVE;
+                    case 2 -> gameMode = GameMode.ADVENTURE;
+                    case 3 -> gameMode = GameMode.SPECTATOR;
+                    default -> {
                         MessagingUtil.genericError(commandSender, "Numeric gamemode value must be between 0 and 3 inclusive");
                         return true;
+                    }
                 }
             } else {
                 for (GameMode gm : GameMode.values()) {
@@ -96,6 +109,10 @@ public class CmdGamemode implements CmdMeinkraft {
         }
 
         if (arguments.length > 1) {
+            if (!permissionAll) {
+                MessagingUtil.noPermissionOthers(commandSender);
+                return true;
+            }
             affectedPlayer = Bukkit.getPlayer(arguments[1]);
             if (affectedPlayer == null) {
                 MessagingUtil.invalidArguments(commandSender, arguments[1], "is not an online player");
@@ -111,16 +128,10 @@ public class CmdGamemode implements CmdMeinkraft {
         }
 
         boolean senderEqualsAffected = commandSender == affectedPlayer;
-        if (!senderEqualsAffected) {
-            if (!CmdPermission.hasOthers(commandSender, label)) {
-                MessagingUtil.noPermissionOthers(commandSender);
-                return true;
-            }
-        }
 
         affectedPlayer.setGameMode(gameMode);
         String formattedGameMode = affectedPlayer.getGameMode().toString().toLowerCase();
-        MessagingUtil.feedback(commandSender, "Set game mode of " + affectedPlayer.getName() + " to " + formattedGameMode);
+        MessagingUtil.notifyExecutor(commandSender, "Set game mode of " + affectedPlayer.getName() + " to " + formattedGameMode);
         if (!senderEqualsAffected) {
             MessagingUtil.notifyPlayer(affectedPlayer, "A wizard set your game mode to " + formattedGameMode);
         }

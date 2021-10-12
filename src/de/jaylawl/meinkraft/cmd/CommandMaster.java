@@ -9,7 +9,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class CmdMaster implements CmdMeinkraft {
+public class CommandMaster implements CommandMeinkraft {
+
+    public static final String PERMISSION_NODE = "mk.admin";
+
+    public CommandMaster() {
+    }
+
+    //
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {

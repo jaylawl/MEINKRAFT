@@ -1,6 +1,7 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
+import de.jaylawl.meinkraft.util.DataCenter;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -8,7 +9,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class CmdFly implements CmdMeinkraft {
+public class CommandGod implements CommandMeinkraft {
+
+    private final DataCenter dataCenter;
+
+    public CommandGod(@NotNull DataCenter dataCenter) {
+        this.dataCenter = dataCenter;
+    }
+
+    //
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
@@ -20,7 +29,7 @@ public class CmdFly implements CmdMeinkraft {
 
         Player affectedPlayer;
 
-        if (arguments.length == 0) {
+        if (arguments.length < 1) {
             if (commandSender instanceof Player) {
                 affectedPlayer = (Player) commandSender;
             } else {
@@ -36,23 +45,21 @@ public class CmdFly implements CmdMeinkraft {
         }
 
         boolean senderEqualsAffected = commandSender == affectedPlayer;
-        if (commandSender != affectedPlayer) {
+        if (!senderEqualsAffected) {
             if (!CmdPermission.hasOthers(commandSender, label)) {
                 MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
         }
 
-        affectedPlayer.setAllowFlight(!affectedPlayer.getAllowFlight());
-        commandSender.sendMessage("Set flight mode of " + affectedPlayer.getName() + " to " + affectedPlayer.getAllowFlight());
+        boolean toggledGodModeState = this.dataCenter.toggleGodMode(affectedPlayer.getUniqueId());
+
+        MessagingUtil.notifyExecutor(commandSender, "Set god mode of " + affectedPlayer.getName() + " to " + toggledGodModeState);
         if (!senderEqualsAffected) {
-            if (affectedPlayer.getAllowFlight()) {
-                MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has granted you flight powers");
-            } else {
-                MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has clipped your wings");
-            }
+            MessagingUtil.notifyPlayer(affectedPlayer, toggledGodModeState ? "A wizard has turned you into a god" : "A wizard has turned you back into a mortal");
         }
 
         return true;
     }
+
 }

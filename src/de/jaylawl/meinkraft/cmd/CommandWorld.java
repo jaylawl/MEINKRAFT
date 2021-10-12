@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CmdWorld implements CmdMeinkraft {
+public class CommandWorld implements CommandMeinkraft {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
@@ -91,7 +91,7 @@ public class CmdWorld implements CmdMeinkraft {
         }
 
         affectedPlayer.teleport(world.getSpawnLocation().add(0.5, 0, 0.5));
-        MessagingUtil.feedback(sender, "Sent player " + affectedPlayer.getName() + " to world \"" + world.getName() + "\"");
+        MessagingUtil.notifyExecutor(sender, "Sent player " + affectedPlayer.getName() + " to world \"" + world.getName() + "\"");
         if (!senderEqualsAffected) {
             MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has poofed you into another world");
         }

@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class CmdPing implements CmdMeinkraft {
+public class CommandPing implements CommandMeinkraft {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
@@ -30,7 +30,7 @@ public class CmdPing implements CmdMeinkraft {
                 if (!CmdPermission.hasOthers(commandSender, label)) {
                     MessagingUtil.noPermissionOthers(commandSender);
                 } else {
-                    MessagingUtil.feedback(commandSender, "Ping of " + affectedPlayer.getName() + ": " + affectedPlayer.spigot().getPing() + " ms");
+                    MessagingUtil.notifyExecutor(commandSender, "Ping of " + affectedPlayer.getName() + ": " + affectedPlayer.spigot().getPing() + " ms");
                 }
             }
         }

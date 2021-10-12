@@ -51,92 +51,92 @@ public class MEINKRAFT extends JavaPlugin {
             this.enabledListeners = (this.enabledListeners + 2);
         }
 
-        if (this.settings.getEnableCommand(CmdFly.class)) {
+        if (this.settings.getEnableCommand(CommandFly.class)) {
             PluginCommand flyCmd = getCommand("fly");
             if (flyCmd != null) {
-                flyCmd.setExecutor(new CmdFly());
+                flyCmd.setExecutor(new CommandFly());
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdGamemode.class)) {
+        if (this.settings.getEnableCommand(CommandGamemode.class)) {
             PluginCommand gmCmd = getCommand("gm");
             if (gmCmd != null) {
-                CmdGamemode cmdGamemode = new CmdGamemode();
-                gmCmd.setExecutor(cmdGamemode);
-                gmCmd.setTabCompleter(cmdGamemode);
+                CommandGamemode commandGamemode = new CommandGamemode();
+                gmCmd.setExecutor(commandGamemode);
+                gmCmd.setTabCompleter(commandGamemode);
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdGod.class)) {
+        if (this.settings.getEnableCommand(CommandGod.class)) {
             PluginCommand godCmd = getCommand("god");
             if (godCmd != null) {
-                godCmd.setExecutor(new CmdGod(this.dataCenter));
+                godCmd.setExecutor(new CommandGod(this.dataCenter));
                 pluginManager.registerEvents(new GodListener(this.dataCenter), this);
                 this.enabledCommands++;
                 this.enabledListeners++;
             }
         }
-        if (this.settings.getEnableCommand(CmdHeal.class)) {
+        if (this.settings.getEnableCommand(CommandHeal.class)) {
             PluginCommand healCmd = getCommand("heal");
             if (healCmd != null) {
-                healCmd.setExecutor(new CmdHeal());
+                healCmd.setExecutor(new CommandHeal());
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdInvsee.class)) {
+        if (this.settings.getEnableCommand(CommandInvsee.class)) {
             PluginCommand invseeCmd = getCommand("invsee");
             if (invseeCmd != null) {
-                CmdInvsee cmdInvsee = new CmdInvsee();
+                CommandInvsee cmdInvsee = new CommandInvsee();
                 invseeCmd.setExecutor(cmdInvsee);
                 invseeCmd.setTabCompleter(cmdInvsee);
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdPing.class)) {
+        if (this.settings.getEnableCommand(CommandPing.class)) {
             PluginCommand pingCmd = getCommand("ping");
             if (pingCmd != null) {
-                pingCmd.setExecutor(new CmdPing());
+                pingCmd.setExecutor(new CommandPing());
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdNightVision.class)) {
+        if (this.settings.getEnableCommand(CommandNightVision.class)) {
             PluginCommand nightvisionCmd = getCommand("nightvision");
             if (nightvisionCmd != null) {
-                nightvisionCmd.setExecutor(new CmdNightVision());
+                nightvisionCmd.setExecutor(new CommandNightVision());
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdQuery.class)) {
+        if (this.settings.getEnableCommand(CommandQuery.class)) {
             PluginCommand queryCmd = getCommand("query");
             if (queryCmd != null) {
-                CmdQuery cmdQuery = new CmdQuery();
+                CommandQuery cmdQuery = new CommandQuery();
                 queryCmd.setExecutor(cmdQuery);
                 queryCmd.setTabCompleter(cmdQuery);
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdSpeed.class)) {
+        if (this.settings.getEnableCommand(CommandSpeed.class)) {
             PluginCommand speedCmd = getCommand("speed");
             if (speedCmd != null) {
-                CmdSpeed cmdSpeed = new CmdSpeed();
+                CommandSpeed cmdSpeed = new CommandSpeed();
                 speedCmd.setExecutor(cmdSpeed);
                 speedCmd.setTabCompleter(cmdSpeed);
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdStatistic.class)) {
+        if (this.settings.getEnableCommand(CommandStatistic.class)) {
             PluginCommand statCmd = getCommand("stat");
             if (statCmd != null) {
-                CmdStatistic cmdStatistic = new CmdStatistic();
+                CommandStatistic cmdStatistic = new CommandStatistic();
                 statCmd.setExecutor(cmdStatistic);
                 statCmd.setTabCompleter(cmdStatistic);
                 this.enabledCommands++;
             }
         }
-        if (this.settings.getEnableCommand(CmdWorld.class)) {
+        if (this.settings.getEnableCommand(CommandWorld.class)) {
             PluginCommand worldCmd = getCommand("world");
             if (worldCmd != null) {
-                CmdWorld cmdWorld = new CmdWorld();
+                CommandWorld cmdWorld = new CommandWorld();
                 worldCmd.setExecutor(cmdWorld);
                 worldCmd.setTabCompleter(cmdWorld);
                 this.enabledCommands++;
@@ -151,7 +151,7 @@ public class MEINKRAFT extends JavaPlugin {
 
         PluginCommand masterCmd = getCommand("meinkraft");
         if (masterCmd != null) {
-            masterCmd.setExecutor(new CmdMaster());
+            masterCmd.setExecutor(new CommandMaster());
         } else {
             logger.severe("Failed to enable the master command; disabling plugin...");
             pluginManager.disablePlugin(this);
@@ -189,7 +189,7 @@ public class MEINKRAFT extends JavaPlugin {
 
     public void reload(@NotNull CommandSender issuer) {
         this.settings = new Settings(FileUtil.getOrCreateConfig());
-        MessagingUtil.feedback(issuer, "Reloaded MEINKRAFT/meinkraft_settings.yml");
+        MessagingUtil.notifyExecutor(issuer, "Reloaded MEINKRAFT/meinkraft_settings.yml");
     }
 
 }

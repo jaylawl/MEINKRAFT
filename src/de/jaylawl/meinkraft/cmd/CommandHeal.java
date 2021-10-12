@@ -1,29 +1,22 @@
 package de.jaylawl.meinkraft.cmd;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
-import de.jaylawl.meinkraft.util.DataCenter;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class CmdGod implements CmdMeinkraft {
-
-    private final DataCenter dataCenter;
-
-    public CmdGod(@NotNull DataCenter dataCenter) {
-        this.dataCenter = dataCenter;
-    }
-
-    //
+public class CommandHeal implements CommandMeinkraft {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
         if (!CmdPermission.hasAny(commandSender, label)) {
-            MessagingUtil.noPermission(commandSender);
+            commandSender.sendMessage("§cInsufficient permission");
             return true;
         }
 
@@ -33,7 +26,7 @@ public class CmdGod implements CmdMeinkraft {
             if (commandSender instanceof Player) {
                 affectedPlayer = (Player) commandSender;
             } else {
-                MessagingUtil.genericError(commandSender, "Missing player argument");
+                MessagingUtil.genericError(commandSender, "§cMissing player argument");
                 return true;
             }
         } else {
@@ -45,21 +38,26 @@ public class CmdGod implements CmdMeinkraft {
         }
 
         boolean senderEqualsAffected = commandSender == affectedPlayer;
-        if (!senderEqualsAffected) {
+        if (commandSender != affectedPlayer) {
             if (!CmdPermission.hasOthers(commandSender, label)) {
                 MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
         }
 
-        boolean toggledGodModeState = this.dataCenter.toggleGodMode(affectedPlayer.getUniqueId());
+        AttributeInstance maxHealth = affectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        affectedPlayer.setHealth(maxHealth != null ? maxHealth.getValue() : 20);
+        affectedPlayer.setExhaustion(0f);
+        affectedPlayer.setSaturation(1f);
+        affectedPlayer.setFoodLevel(20);
 
-        MessagingUtil.feedback(commandSender, "Set god mode of " + affectedPlayer.getName() + " to " + toggledGodModeState);
+        MessagingUtil.notifyExecutor(commandSender, "Fully healed player " + affectedPlayer.getName());
         if (!senderEqualsAffected) {
-            MessagingUtil.notifyPlayer(affectedPlayer, toggledGodModeState ? "A wizard has turned you into a god" : "A wizard has turned you back into a mortal");
+            MessagingUtil.notifyPlayer(affectedPlayer, "You've been rejuvenated by a wizard");
         }
 
         return true;
     }
+
 
 }

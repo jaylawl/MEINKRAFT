@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.util;
 
-import de.jaylawl.meinkraft.MEINKRAFT;
+import de.jaylawl.meinkraft.Meinkraft;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -22,7 +22,7 @@ public class HelpBook {
         b.spigot().addPage(
                 new ComponentBuilder("")
                         .append(MessagingUtil.getPluginColor() + "§lMEINKRAFT§r\n" +
-                                "§8version " + MEINKRAFT.inst().getDescription().getVersion() + "\n" +
+                                "§8version " + Meinkraft.getInstance().getDescription().getVersion() + "\n" +
                                 "§8created by §rjaylawl")
                         .append("\n\n").reset()
                         .append("§8§l>§r §rReload plugin§r")
@@ -33,9 +33,9 @@ public class HelpBook {
                         .append("§7[§6?§7]§r")
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("(De-)activating commands and/or\nmodules requires a server restart").create()))
                         .append("\n").reset()
-                        .append("  Commands: " + MEINKRAFT.getEnabledCommands() + "\n" +
-                                "  Modules: " + MEINKRAFT.getEnabledModules() + "\n" +
-                                "  Listeners: " + MEINKRAFT.getEnabledListeners() + "\n\n")
+                        .append("  Commands: " + Meinkraft.getEnabledCommands() + "\n" +
+                                "  Modules: 0" + "\n" +
+                                "  Listeners: " + Meinkraft.getEnabledListeners() + "\n\n")
                         .append("§8§l>§r §9Donate via PayPal§r\n")
                         .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://paypal.me/langejulian"))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click here to donate to the developers\nOpens your browser to paypal.me").create()))

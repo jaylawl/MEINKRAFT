@@ -1,4 +1,4 @@
-package de.jaylawl.meinkraft.cmd;
+package de.jaylawl.meinkraft.command;
 
 import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.MessagingUtil;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandSpeed implements CommandMeinkraft {
+public class CommandSpeed implements MeinkraftCommand {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
@@ -24,10 +24,10 @@ public class CommandSpeed implements CommandMeinkraft {
             return Collections.emptyList();
         }
 
-        int argN = TabHelper.getArgumentNumber(arguments);
         List<String> completions = new ArrayList<>();
+        int argumentNumber = TabHelper.getArgumentNumber(arguments);
 
-        switch (argN) {
+        switch (argumentNumber) {
             case 1:
                 completions = Arrays.asList("flight", "walk");
                 break;
@@ -43,12 +43,14 @@ public class CommandSpeed implements CommandMeinkraft {
                 return Collections.emptyList();
         }
 
-        return TabHelper.sortedCompletions(arguments[argN - 1], completions);
+        return TabHelper.sortedCompletions(arguments[argumentNumber - 1], completions);
 
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+
+        // TODO: 13.10.2021  
 
         if (!CmdPermission.hasAny(commandSender, label)) {
             MessagingUtil.noPermission(commandSender);
@@ -106,7 +108,7 @@ public class CommandSpeed implements CommandMeinkraft {
         }
 
         float value;
-        if (arguments[1].toLowerCase().equals("reset") || arguments[1].toLowerCase().equals("r")) {
+        if (arguments[1].equalsIgnoreCase("reset") || arguments[1].equalsIgnoreCase("r")) {
             value = type.equals("flight") ? 0.1f : 0.2f;
         } else if (arguments[1].matches("\\d*.*\\d*")) {
             value = Float.parseFloat(arguments[1]);
@@ -124,7 +126,7 @@ public class CommandSpeed implements CommandMeinkraft {
         }
         MessagingUtil.notifyExecutor(commandSender, "Set " + type + " speed of " + affectedPlayer.getName() + " to " + value);
         if (!senderEqualsAffected) {
-            MessagingUtil.notifyPlayer(affectedPlayer, "A wizard has set your " + type + " speed to " + value);
+            MessagingUtil.notifyTargetPlayer(affectedPlayer, "A wizard has set your " + type + " speed to " + value);
         }
 
         return true;

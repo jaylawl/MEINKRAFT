@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.settings;
 
-import de.jaylawl.meinkraft.MEINKRAFT;
+import de.jaylawl.meinkraft.Meinkraft;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +55,7 @@ public class ResourcePackHandler {
     }
 
     public ResourcePackHandler(@NotNull ConfigurationSection configSection) {
-        Logger logger = MEINKRAFT.inst().getLogger();
+        Logger logger = Meinkraft.getInstance().getLogger();
         this.enabled = configSection.getBoolean("Enabled", DEFAULT_ENABLED);
         this.link = configSection.getString("Link", DEFAULT_LINK);
         this.hash = configSection.getString("Hash", DEFAULT_HASH);

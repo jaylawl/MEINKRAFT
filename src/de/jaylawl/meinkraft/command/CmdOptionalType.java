@@ -1,32 +1,32 @@
-package de.jaylawl.meinkraft.cmd;
+package de.jaylawl.meinkraft.command;
 
 import org.jetbrains.annotations.NotNull;
 
 public enum CmdOptionalType {
 
     FLY(CommandFly.class, "fly"),
-    GAMEMODE(CommandGamemode.class, "gm"),
-    GOD(CommandGod.class, "god"),
+    GAMEMODE(CommandGameMode.class, "gm"),
+    GOD(CommandGodMode.class, "godmode"),
     HEAL(CommandHeal.class, "heal"),
-    INVSEE(CommandInvsee.class, "invsee"),
+    INVSEE(CommandInventorySpy.class, "inventoryspy"),
     NIGHT_VISION(CommandNightVision.class, "nightvision"),
     PING(CommandPing.class, "ping"),
     QUERY(CommandQuery.class, "query"),
     SPEED(CommandSpeed.class, "speed"),
-    STATISTIC(CommandStatistic.class, "stat"),
+    STATISTIC(CommandStatistic.class, "statistic"),
     WORLD(CommandWorld.class, "world");
 
-    private final Class<? extends CommandMeinkraft> clazz;
+    private final Class<? extends MeinkraftCommand> clazz;
     private final String commandLabel;
 
-    CmdOptionalType(Class<? extends CommandMeinkraft> clazz, @NotNull String commandLabel) {
+    CmdOptionalType(@NotNull Class<? extends MeinkraftCommand> clazz, @NotNull String commandLabel) {
         this.clazz = clazz;
         this.commandLabel = commandLabel;
     }
 
     //
 
-    public @NotNull Class<? extends CommandMeinkraft> getClazz() {
+    public @NotNull Class<? extends MeinkraftCommand> getClazz() {
         return this.clazz;
     }
 

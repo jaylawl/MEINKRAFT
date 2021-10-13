@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.listener.bukkit;
 
-import de.jaylawl.meinkraft.MEINKRAFT;
+import de.jaylawl.meinkraft.Meinkraft;
 import de.jaylawl.meinkraft.settings.CommandBlocker;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.event.EventHandler;
@@ -18,7 +18,7 @@ public class CommandListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        CommandBlocker commandBlocker = MEINKRAFT.getSettings().getCommandBlocker();
+        CommandBlocker commandBlocker = Meinkraft.getSettings().getCommandBlocker();
         if (commandBlocker.isEnabled()) {
             if (!event.getPlayer().hasPermission("mk.plugins")) {
                 List<String> blockedCommands = commandBlocker.getBlockedCommands();

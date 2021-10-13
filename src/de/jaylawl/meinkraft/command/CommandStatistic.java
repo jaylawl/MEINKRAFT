@@ -1,6 +1,5 @@
-package de.jaylawl.meinkraft.cmd;
+package de.jaylawl.meinkraft.command;
 
-import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
 import net.md_5.bungee.api.ChatColor;
@@ -20,7 +19,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class CommandStatistic implements CommandMeinkraft {
+public class CommandStatistic implements MeinkraftCommand {
+
+    public static final String PERMISSION_NODE = "mk.statistic";
+    public static final String PERMISSION_NODE_SELF = "mk.statistic.self";
+    public static final String PERMISSION_NODE_OTHERS = "mk.statistic.others";
 
     private final List<String> statisticStrings = new ArrayList<>();
     private final HashMap<Statistic.Type, List<String>> subStatisticStrings = new HashMap<>();
@@ -54,25 +57,28 @@ public class CommandStatistic implements CommandMeinkraft {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(commandSender, label)) {
+        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
+        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+
+        if (!permissionSelf && !permissionOthers) {
             return Collections.emptyList();
         }
 
-        int argumentNumber = TabHelper.getArgumentNumber(arguments);
         List<String> completions = new ArrayList<>();
+        int argumentNumber = TabHelper.getArgumentNumber(arguments);
 
         switch (argumentNumber) {
-            case 1: {
-                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    completions.add(onlinePlayer.getName());
+            case 1 -> {
+                if (permissionOthers) {
+                    completions.addAll(TabCompleteUtil.getOnlinePlayerNames());
                 }
-                break;
             }
-            case 2: {
+
+            case 2 -> {
                 completions.addAll(this.statisticStrings);
-                break;
             }
-            case 3: {
+
+            case 3 -> {
                 Statistic statistic;
                 try {
                     statistic = Statistic.valueOf(arguments[1].toUpperCase());
@@ -82,9 +88,9 @@ public class CommandStatistic implements CommandMeinkraft {
                 if (statistic.isSubstatistic()) {
                     completions.addAll(this.subStatisticStrings.get(statistic.getType()));
                 }
-                break;
             }
-            default: {
+
+            default -> {
                 return Collections.emptyList();
             }
         }
@@ -95,7 +101,12 @@ public class CommandStatistic implements CommandMeinkraft {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(commandSender, label)) {
+        // TODO: 13.10.2021
+
+        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
+        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+
+        if (!permissionSelf && !permissionOthers) {
             MessagingUtil.noPermission(commandSender);
             return true;
         }

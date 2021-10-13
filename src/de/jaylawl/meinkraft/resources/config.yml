@@ -1,88 +1,31 @@
 # MEINKRAFT
 # created by jaylawl
 #
-# Donate: http://paypal.me/langejulian
 # SpigotMC: https://www.spigotmc.org/resources/meinkraft.74914/
 # Github-page: https://github.com/jaylawl/MEINKRAFT/issues
 #
 # (de-)activating commands and/or modules requires a server-restart
 #
 # Permissions:
-# - self-permission for each command: "mk.command.self" (example: "mk.fly.self")
-# - permission to use on all players: "mk.command" (example: "mk.fly")
-# - permission for everything: "mk.admin"
+# - base permission to access tab completion and feedback of command:   "mk.<command>"            (example: "mk.fly")
+# - self permission for each command:                                   "mk.<command>.self"       (example: "mk.fly.self")
+# - permission to use command effects on all players:                   "mk.<command>.others"     (example: "mk.fly.others")
+# - permission for master command:                                      "mk.admin"
 #
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Commands:
   fly: true
   gm: true
-  god: true
+  godmode: true
   heal: true
-  invsee: true
+  inventoryspy: true
   nightvision: true
   ping: true
   query: true
   speed: true
-  stat: true
+  statistic: true
   world: true
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Modules:
-
-  CommandBlocker:
-    Enabled: true
-    SendFeedback: true
-    BlockedCommands:
-      - '/example1'
-      - '/example2'
-      - '/addasmanyasyoulike'
-
-  UnsafePlayerBlocker:
-    Enabled: false
-    UnsafeCharacters:
-      Block: true
-      KickMessage:
-        - '&c&lConnection rejected by the server'
-        - '&4Username contains disallowed character(s)'
-        - '&f'
-        - '&fUsernames must only contain letters, numbers and underscores'
-        - '&fConsider changing your username and rejoin afterwards'
-    DuplicateUsernames:
-      Block: true
-      KickMessage:
-        - '&c&lConnection rejected by the server'
-        - '&4Duplicate username'
-        - '&f'
-        - '&fThere already is a player with the same name on the server'
-        - '&fConsider changing your username and rejoin afterwards'
-    ContainingKeywords:
-      Block: false
-      Keywords:
-        - 'Hitler?'
-        - 'Idk whatever floats your boat'
-      KickMessage:
-        - '&c&lConnection rejected by the server'
-        - '&4Username contains blacklisted keyword(s)'
-        - '&r'
-        - '&fThis server deems your username unhealthy to its environment'
-        - '&fConsider changing your username and rejoin afterwards'
-
-  ResourcePackHandler:
-    Enabled: false
-    Link: ''
-    Hash: ''
-    KickOnDecline: true
-    KickOnFailure: true
-    TicksBeforeKick: 20
-    IgnoreOperators: false
-    IgnoredUUIDs: []
-    KickMessage:
-      - '&c&lResource pack download declined or failed'
-      - '&r'
-      - '&fThe resource pack is mandatory for play on this server'
-      - '&fSet resource packs to &9Enabled&r or &9Prompt&r and re-connect'
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

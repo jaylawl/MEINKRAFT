@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.settings;
 
-import de.jaylawl.meinkraft.cmd.*;
+import de.jaylawl.meinkraft.command.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Settings {
 
-    private final HashMap<Class<? extends CommandMeinkraft>, Boolean> enabledCommands = new HashMap<>();
+    private final HashMap<Class<? extends MeinkraftCommand>, Boolean> enabledCommands = new HashMap<>();
     private final CommandBlocker commandBlocker;
     private final UnsafePlayerBlocker unsafePlayerBlocker;
     private final ResourcePackHandler resourcePackHandler;
@@ -31,7 +31,7 @@ public class Settings {
 
     //
 
-    public boolean getEnableCommand(@NotNull Class<? extends CommandMeinkraft> clazz) {
+    public boolean getEnableCommand(@NotNull Class<? extends MeinkraftCommand> clazz) {
         return this.enabledCommands.get(clazz);
     }
 

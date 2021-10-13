@@ -22,7 +22,7 @@ public class TabHelper {
         return i;
     }
 
-    public static List<String> sortedCompletions(@NotNull String lastArgument, @NotNull List<String> completions) {
+    public static @NotNull List<String> sortedCompletions(@NotNull String lastArgument, @NotNull List<String> completions) {
         List<String> sortedCompletions = new ArrayList<>();
         StringUtil.copyPartialMatches(lastArgument, completions, sortedCompletions);
         Collections.sort(sortedCompletions);

@@ -9,6 +9,8 @@ public class MessagingUtil {
 
     private final static String PLUGIN_COLOR = "§4";
     private final static String PLUGIN_TAG = "§7[" + PLUGIN_COLOR + "MK§7]§r";
+
+    public static final String NO_PERMISSION_MESSAGE = (ChatColor.RED + "Insufficient permission");
     
     //
 
@@ -36,7 +38,7 @@ public class MessagingUtil {
         sender.sendMessage(ChatColor.RESET + message);
     }
 
-    public static void notifyPlayer(@NotNull Player player, @NotNull String message) {
+    public static void notifyTargetPlayer(@NotNull Player player, @NotNull String message) {
         player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + message);
     }
 

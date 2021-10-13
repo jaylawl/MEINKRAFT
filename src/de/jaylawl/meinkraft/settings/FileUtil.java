@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.settings;
 
-import de.jaylawl.meinkraft.MEINKRAFT;
-import de.jaylawl.meinkraft.cmd.CmdOptionalType;
+import de.jaylawl.meinkraft.Meinkraft;
+import de.jaylawl.meinkraft.command.CmdOptionalType;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ public class FileUtil {
     //
 
     public static boolean createPluginDirectory() {
-        File folder = MEINKRAFT.inst().getDataFolder();
+        File folder = Meinkraft.getInstance().getDataFolder();
         if (!folder.exists() || !folder.isDirectory()) {
             return folder.mkdirs();
         }
@@ -29,7 +29,7 @@ public class FileUtil {
     }
 
     public static @NotNull File getConfigFile() {
-        MEINKRAFT instance = MEINKRAFT.inst();
+        Meinkraft instance = Meinkraft.getInstance();
         Logger logger = instance.getLogger();
         if (!createPluginDirectory()) {
             logger.warning("Failed to create the plugin's data folder");

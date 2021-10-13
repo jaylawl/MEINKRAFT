@@ -1,6 +1,6 @@
 package de.jaylawl.meinkraft.listener.bukkit;
 
-import de.jaylawl.meinkraft.MEINKRAFT;
+import de.jaylawl.meinkraft.Meinkraft;
 import de.jaylawl.meinkraft.settings.UnsafePlayerBlocker;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,8 +19,8 @@ public class ConnectionListener implements Listener {
 
     @EventHandler
     public void onLogin(@NotNull PlayerLoginEvent event) {
-        Logger logger = MEINKRAFT.inst().getLogger();
-        UnsafePlayerBlocker unsafePlayerBlocker = MEINKRAFT.getSettings().getUnsafePlayerBlocker();
+        Logger logger = Meinkraft.getInstance().getLogger();
+        UnsafePlayerBlocker unsafePlayerBlocker = Meinkraft.getSettings().getUnsafePlayerBlocker();
         if (!unsafePlayerBlocker.isEnabled()) {
             return;
         }

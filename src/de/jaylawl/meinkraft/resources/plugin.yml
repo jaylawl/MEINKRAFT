@@ -3,7 +3,7 @@ name: MEINKRAFT
 version: 1.3.0
 api-version: "1.17"
 author: jaylawl
-description: Lightweight library of commands & tools
+description: Lightweight library of admin commands & tools
 
 commands:
 

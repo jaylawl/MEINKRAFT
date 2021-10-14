@@ -139,11 +139,16 @@ public class Meinkraft extends JavaPlugin {
         if (this.settings.getEnableCommand(CommandNightVision.class)) {
             PluginCommand nightvisionCommand = getCommand("nightvision");
             if (nightvisionCommand != null) {
+                nightvisionCommand.setPermission(CommandNightVision.PERMISSION_NODE);
+                nightvisionCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
                 CommandNightVision commandNightVision = new CommandNightVision();
                 nightvisionCommand.setTabCompleter(commandNightVision);
                 nightvisionCommand.setExecutor(commandNightVision);
                 this.enabledCommands++;
+                logger.info("Enabled \"nightvision\" command");
             }
+        } else {
+            logger.info("Skipped enabling \"nightvision\" command");
         }
 
         if (this.settings.getEnableCommand(CommandQuery.class)) {
@@ -164,21 +169,31 @@ public class Meinkraft extends JavaPlugin {
         if (this.settings.getEnableCommand(CommandSpeed.class)) {
             PluginCommand speedCommand = getCommand("speed");
             if (speedCommand != null) {
+                speedCommand.setPermission(CommandSpeed.PERMISSION_NODE);
+                speedCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
                 CommandSpeed cmdSpeed = new CommandSpeed();
                 speedCommand.setExecutor(cmdSpeed);
                 speedCommand.setTabCompleter(cmdSpeed);
                 this.enabledCommands++;
+                logger.info("Enabled \"speed\" command");
             }
+        } else {
+            logger.info("Skipped enabling \"speed\" command");
         }
 
         if (this.settings.getEnableCommand(CommandStatistic.class)) {
-            PluginCommand statisticCommand = getCommand("stat");
+            PluginCommand statisticCommand = getCommand("statistic");
             if (statisticCommand != null) {
+                statisticCommand.setPermission(CommandStatistic.PERMISSION_NODE);
+                statisticCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
                 CommandStatistic cmdStatistic = new CommandStatistic();
                 statisticCommand.setExecutor(cmdStatistic);
                 statisticCommand.setTabCompleter(cmdStatistic);
                 this.enabledCommands++;
+                logger.info("Enabled \"statistic\" command");
             }
+        } else {
+            logger.info("Skipped enabling \"statistic\" command");
         }
 
         if (this.settings.getEnableCommand(CommandWorld.class)) {

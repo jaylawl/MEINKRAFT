@@ -10,7 +10,11 @@
 # - base permission to access tab completion and feedback of command:   "mk.<command>"            (example: "mk.fly")
 # - self permission for each command:                                   "mk.<command>.self"       (example: "mk.fly.self")
 # - permission to use command effects on all players:                   "mk.<command>.others"     (example: "mk.fly.others")
+#
 # - permission for master command:                                      "mk.admin"
+# - commands with only one permission:
+#     /query
+#     /statistic
 #
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

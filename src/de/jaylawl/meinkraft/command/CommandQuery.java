@@ -20,8 +20,6 @@ import java.util.List;
 public class CommandQuery implements MeinkraftCommand {
 
     public static final String PERMISSION_NODE = "mk.query";
-    public static final String PERMISSION_NODE_SELF = "mk.query.self";
-    public static final String PERMISSION_NODE_OTHERS = "mk.query.others";
 
     public CommandQuery() {
     }
@@ -30,13 +28,6 @@ public class CommandQuery implements MeinkraftCommand {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
-
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
-
-        if (!permissionSelf && !permissionOthers) {
-            return Collections.emptyList();
-        }
 
         List<String> completions = new ArrayList<>();
         int argumentNumber = TabHelper.getArgumentNumber(arguments);
@@ -77,14 +68,6 @@ public class CommandQuery implements MeinkraftCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
-
-        if (!permissionSelf && !permissionOthers) {
-            MessagingUtil.noPermission(commandSender);
-            return true;
-        }
-
         if (arguments.length == 0) {
             commandSender.sendMessage(ChatColor.GREEN + "/query" + ChatColor.RED + " <player>" + ChatColor.GRAY + " <query>");
             return true;
@@ -94,19 +77,6 @@ public class CommandQuery implements MeinkraftCommand {
         if (targetPlayer == null) {
             MessagingUtil.invalidArguments(commandSender, arguments[0], "is not an online player");
             return true;
-        }
-
-        boolean targetEqualsSender = targetPlayer == commandSender;
-        if (targetEqualsSender) {
-            if (!permissionSelf) {
-                MessagingUtil.noPermission(commandSender);
-                return true;
-            }
-        } else {
-            if (!permissionOthers) {
-                MessagingUtil.noPermissionOthers(commandSender);
-                return true;
-            }
         }
 
         if (arguments.length == 1) {

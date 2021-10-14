@@ -1,8 +1,8 @@
 package de.jaylawl.meinkraft.command;
 
-import de.jaylawl.meinkraft.util.CmdPermission;
 import de.jaylawl.meinkraft.util.MessagingUtil;
 import de.jaylawl.meinkraft.util.TabHelper;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,16 +11,27 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class CommandSpeed implements MeinkraftCommand {
 
+    public static final String PERMISSION_NODE = "mk.speed";
+    public static final String PERMISSION_NODE_SELF = "mk.speed.self";
+    public static final String PERMISSION_NODE_OTHERS = "mk.speed.others";
+
+    public CommandSpeed() {
+    }
+
+    //
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        if (!CmdPermission.hasAny(commandSender, label)) {
+        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
+        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+
+        if (!permissionSelf && !permissionOthers) {
             return Collections.emptyList();
         }
 
@@ -28,19 +39,25 @@ public class CommandSpeed implements MeinkraftCommand {
         int argumentNumber = TabHelper.getArgumentNumber(arguments);
 
         switch (argumentNumber) {
-            case 1:
-                completions = Arrays.asList("flight", "walk");
-                break;
-            case 2:
-                completions = Collections.singletonList("[value or \"reset\"]");
-                break;
-            case 3:
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    completions.add(p.getName());
+            case 1 -> {
+                completions.add("flight");
+                completions.add("walk");
+            }
+            case 2 -> {
+                completions.add("[value or \"reset\"]");
+            }
+            case 3 -> {
+                if (permissionOthers) {
+                    completions.addAll(TabCompleteUtil.getOnlinePlayerNames());
+                } else {
+                    if (commandSender instanceof Player player) {
+                        completions.add(player.getName());
+                    }
                 }
-                break;
-            default:
+            }
+            default -> {
                 return Collections.emptyList();
+            }
         }
 
         return TabHelper.sortedCompletions(arguments[argumentNumber - 1], completions);
@@ -50,83 +67,77 @@ public class CommandSpeed implements MeinkraftCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        // TODO: 13.10.2021  
+        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
+        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
 
-        if (!CmdPermission.hasAny(commandSender, label)) {
+        if (!permissionSelf && !permissionOthers) {
             MessagingUtil.noPermission(commandSender);
             return true;
         }
 
-        Player affectedPlayer;
+        Player targetPlayer;
 
         if (arguments.length < 1) {
-            MessagingUtil.genericError(commandSender, "Missing type argument");
+            commandSender.sendMessage(ChatColor.GREEN + "/" + label + ChatColor.RED + " <flight/walk>" + ChatColor.GRAY + " <value> [player]");
             return true;
         } else if (arguments.length < 2) {
-            MessagingUtil.genericError(commandSender, "Missing value argument");
+            commandSender.sendMessage(ChatColor.GREEN + "/" + label + " " + arguments[0] + ChatColor.RED + " <value>" + ChatColor.GRAY + " [player]");
             return true;
         } else if (arguments.length < 3) {
             if (commandSender instanceof Player) {
-                affectedPlayer = (Player) commandSender;
+                targetPlayer = (Player) commandSender;
             } else {
                 MessagingUtil.genericError(commandSender, "Missing player argument");
                 return true;
             }
         } else {
-            affectedPlayer = Bukkit.getPlayer(arguments[2]);
-            if (affectedPlayer == null) {
+            targetPlayer = Bukkit.getPlayer(arguments[2]);
+            if (targetPlayer == null) {
                 MessagingUtil.invalidArguments(commandSender, arguments[2], "is not an online player");
                 return true;
             }
         }
 
-        boolean senderEqualsAffected = commandSender == affectedPlayer;
-        if (commandSender != affectedPlayer) {
-            if (!CmdPermission.hasOthers(commandSender, label)) {
+        boolean targetEqualsSender = targetPlayer == commandSender;
+        if (targetEqualsSender) {
+            if (!permissionSelf) {
+                MessagingUtil.noPermission(commandSender);
+                return true;
+            }
+        } else {
+            if (!permissionOthers) {
                 MessagingUtil.noPermissionOthers(commandSender);
                 return true;
             }
         }
 
-        String type;
-        switch (arguments[0].toLowerCase()) {
-            case "flight":
-            case "flying":
-            case "fly":
-            case "f":
-                type = "flight";
-                break;
-            case "run":
-            case "walking":
-            case "walk":
-            case "w":
-                type = "walk";
-                break;
-            default:
-                MessagingUtil.invalidArguments(commandSender, arguments[0], "unknown type; must be \"flight\" or \"walk\"");
-                return true;
+        String speedType = arguments[0].toLowerCase();
+        if (!speedType.equals("flight") && !speedType.equals("walk")) {
+            MessagingUtil.invalidArguments(commandSender, arguments[0], "is not a valid speed type; must be \"flight\" or \"walk\"");
+            return true;
         }
 
-        float value;
+        float speedValue;
         if (arguments[1].equalsIgnoreCase("reset") || arguments[1].equalsIgnoreCase("r")) {
-            value = type.equals("flight") ? 0.1f : 0.2f;
+            speedValue = speedType.equals("flight") ? 0.1f : 0.2f;
         } else if (arguments[1].matches("\\d*.*\\d*")) {
-            value = Float.parseFloat(arguments[1]);
+            speedValue = Float.parseFloat(arguments[1]);
         } else {
             MessagingUtil.invalidArguments(commandSender, arguments[1], "unknown value; must be a number or \"reset\"");
             return true;
         }
-        value = Math.min(1f, value);
-        value = Math.max(-1f, value);
+        speedValue = Math.min(1f, speedValue);
+        speedValue = Math.max(-1f, speedValue);
 
-        if (type.equals("flight")) {
-            affectedPlayer.setFlySpeed(value);
+        if (speedType.equals("flight")) {
+            targetPlayer.setFlySpeed(speedValue);
         } else {
-            affectedPlayer.setWalkSpeed(value);
+            targetPlayer.setWalkSpeed(speedValue);
         }
-        MessagingUtil.notifyExecutor(commandSender, "Set " + type + " speed of " + affectedPlayer.getName() + " to " + value);
-        if (!senderEqualsAffected) {
-            MessagingUtil.notifyTargetPlayer(affectedPlayer, "A wizard has set your " + type + " speed to " + value);
+
+        MessagingUtil.notifyExecutor(commandSender, "Set " + speedType + " speed of " + targetPlayer.getName() + " to " + speedValue);
+        if (!targetEqualsSender) {
+            MessagingUtil.notifyTargetPlayer(targetPlayer, "A wizard has set your " + speedType + " speed to " + speedValue);
         }
 
         return true;

@@ -53,7 +53,13 @@ public class CommandNightVision implements MeinkraftCommand {
         int argumentNumber = TabHelper.getArgumentNumber(arguments);
 
         if (argumentNumber == 1) {
-            completions.addAll(TabCompleteUtil.getOnlinePlayerNames());
+            if (permissionOthers) {
+                completions.addAll(TabCompleteUtil.getOnlinePlayerNames());
+            } else {
+                if (commandSender instanceof Player player) {
+                    completions.add(player.getName());
+                }
+            }
             return TabHelper.sortedCompletions(arguments[argumentNumber - 1], completions);
 
         } else {
@@ -65,6 +71,8 @@ public class CommandNightVision implements MeinkraftCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+
+        // TODO: 14.10.2021 probably broken in 1.17?
 
         boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
         boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);

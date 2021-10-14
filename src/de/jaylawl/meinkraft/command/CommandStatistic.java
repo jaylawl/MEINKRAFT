@@ -22,8 +22,6 @@ import java.util.List;
 public class CommandStatistic implements MeinkraftCommand {
 
     public static final String PERMISSION_NODE = "mk.statistic";
-    public static final String PERMISSION_NODE_SELF = "mk.statistic.self";
-    public static final String PERMISSION_NODE_OTHERS = "mk.statistic.others";
 
     private final List<String> statisticStrings = new ArrayList<>();
     private final HashMap<Statistic.Type, List<String>> subStatisticStrings = new HashMap<>();
@@ -57,21 +55,12 @@ public class CommandStatistic implements MeinkraftCommand {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
-
-        if (!permissionSelf && !permissionOthers) {
-            return Collections.emptyList();
-        }
-
         List<String> completions = new ArrayList<>();
         int argumentNumber = TabHelper.getArgumentNumber(arguments);
 
         switch (argumentNumber) {
             case 1 -> {
-                if (permissionOthers) {
-                    completions.addAll(TabCompleteUtil.getOnlinePlayerNames());
-                }
+                completions.addAll(TabCompleteUtil.getOnlinePlayerNames());
             }
 
             case 2 -> {
@@ -101,21 +90,11 @@ public class CommandStatistic implements MeinkraftCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        // TODO: 13.10.2021
-
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
-
-        if (!permissionSelf && !permissionOthers) {
-            MessagingUtil.noPermission(commandSender);
-            return true;
-        }
-
         OfflinePlayer offlineAffectedPlayer;
         Statistic statistic;
 
         if (arguments.length == 0) {
-            commandSender.sendMessage(ChatColor.GREEN + "/stat " + ChatColor.RED + "<player> <statistic> " + ChatColor.GRAY + "[]");
+            commandSender.sendMessage(ChatColor.GREEN + "/" + label + ChatColor.RED + " <player> <statistic>" + ChatColor.GRAY + " []");
             return true;
         } else {
             offlineAffectedPlayer = Bukkit.getOfflinePlayerIfCached(arguments[0]);
@@ -130,14 +109,14 @@ public class CommandStatistic implements MeinkraftCommand {
         }
 
         if (arguments.length < 2) {
-            commandSender.sendMessage(ChatColor.GREEN + "/stat " + offlineAffectedPlayer.getName() + " " + ChatColor.RED + "<statistic> " + ChatColor.GRAY + "[]");
+            commandSender.sendMessage(ChatColor.GREEN + "/" + label + " " + offlineAffectedPlayer.getName() + ChatColor.RED + " <statistic>" + ChatColor.GRAY + " []");
             return true;
         }
 
         try {
             statistic = Statistic.valueOf(arguments[1].toUpperCase());
         } catch (IllegalArgumentException exception) {
-            commandSender.sendMessage(ChatColor.RED + "\"" + arguments[1] + "\" is not a valid statistic");
+            MessagingUtil.invalidArguments(commandSender, arguments[1], "is not a valid statistic");
             return true;
         }
 
@@ -152,22 +131,15 @@ public class CommandStatistic implements MeinkraftCommand {
             Statistic.Type statisticType = statistic.getType();
 
             if (arguments.length < 3) {
-                String requiredArgument = "";
-                switch (statisticType) {
-                    case ITEM: {
-                        requiredArgument = "item";
-                        break;
-                    }
-                    case BLOCK: {
-                        requiredArgument = "block";
-                        break;
-                    }
-                    case ENTITY: {
-                        requiredArgument = "entity-type";
-                        break;
-                    }
+                String requiredArgument = switch (statisticType) {
+                    case ITEM -> "item";
+                    case BLOCK -> "block";
+                    case ENTITY -> "entity-type";
+                    default -> null;
+                };
+                if (requiredArgument != null) {
+                    commandSender.sendMessage(ChatColor.GREEN + "/" + label + " " + offlineAffectedPlayer.getName() + " " + statistic.toString().toLowerCase() + " " + ChatColor.RED + "<" + requiredArgument + ">");
                 }
-                commandSender.sendMessage(ChatColor.GREEN + "/stat " + offlineAffectedPlayer.getName() + " " + statistic.toString().toLowerCase() + " " + ChatColor.RED + "<" + requiredArgument + ">");
                 return true;
 
             } else {
@@ -183,8 +155,8 @@ public class CommandStatistic implements MeinkraftCommand {
                 }
 
                 switch (statisticType) {
-                    case ITEM:
-                    case BLOCK: {
+
+                    case ITEM, BLOCK -> {
                         String materialString = lookupString.replace("minecraft:", "");
                         Material material;
                         try {
@@ -195,9 +167,9 @@ public class CommandStatistic implements MeinkraftCommand {
                         }
                         statisticValue = offlineAffectedPlayer.getStatistic(statistic, material);
                         statisticString = statisticString + ":" + materialString.toLowerCase();
-                        break;
                     }
-                    case ENTITY: {
+
+                    case ENTITY -> {
                         String entityTypeString = lookupString.replace("minecraft:", "");
                         EntityType entityType;
                         try {
@@ -208,8 +180,8 @@ public class CommandStatistic implements MeinkraftCommand {
                         }
                         statisticValue = offlineAffectedPlayer.getStatistic(statistic, entityType);
                         statisticString = statisticString + ":" + entityTypeString.toLowerCase();
-                        break;
                     }
+
                 }
 
             }

@@ -90,7 +90,7 @@ public class CommandPing implements MeinkraftCommand {
             }
         }
 
-        int ping = targetPlayer.spigot().getPing();
+        int ping = targetPlayer.getPing();
         if (targetEqualsSender) {
             MessagingUtil.notifyTargetPlayer(targetPlayer, "A wizard responded within " + ping + " ms");
         } else {

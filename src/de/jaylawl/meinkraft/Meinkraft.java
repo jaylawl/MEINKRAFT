@@ -92,9 +92,9 @@ public class Meinkraft extends JavaPlugin {
 
         PluginCommand masterCommand = getCommand("meinkraft");
         if (masterCommand != null) {
-            masterCommand.setPermission(CommandMaster.PERMISSION_NODE);
-            masterCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
             CommandMaster commandMaster = new CommandMaster();
+            masterCommand.setPermission(commandMaster.getBasePermissionNode());
+            masterCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
             masterCommand.setTabCompleter(commandMaster);
             masterCommand.setExecutor(commandMaster);
             this.enabledCommands++;

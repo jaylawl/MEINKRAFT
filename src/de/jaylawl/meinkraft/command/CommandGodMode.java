@@ -37,7 +37,7 @@ public class CommandGodMode implements MeinkraftCommand {
 
     @Override
     public @NotNull Collection<Listener> getRequiredListenerClasses() {
-        return Collections.singletonList(new GodModeListener());
+        return Collections.singletonList(new GodModeListener(Meinkraft.getDataCenter()));
     }
 
     //

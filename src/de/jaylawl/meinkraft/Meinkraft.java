@@ -7,6 +7,7 @@ import de.jaylawl.meinkraft.settings.FileUtil;
 import de.jaylawl.meinkraft.settings.Settings;
 import de.jaylawl.meinkraft.util.DataCenter;
 import de.jaylawl.meinkraft.util.MessagingUtil;
+import de.jaylawl.meinkraft.util.PingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -46,7 +47,7 @@ public class Meinkraft extends JavaPlugin {
         PluginManager pluginManager = getServer().getPluginManager();
 
         reload(Bukkit.getConsoleSender());
-
+        PingUtil.init();
         //
 
         for (CommandIndex ci : CommandIndex.values()) {

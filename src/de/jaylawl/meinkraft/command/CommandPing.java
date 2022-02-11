@@ -3,8 +3,10 @@ package de.jaylawl.meinkraft.command;
 import de.jaylawl.meinkraft.command.util.TabCompleteUtil;
 import de.jaylawl.meinkraft.command.util.TabHelper;
 import de.jaylawl.meinkraft.util.MessagingUtil;
+import de.jaylawl.meinkraft.util.PingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -93,7 +95,21 @@ public class CommandPing implements MeinkraftCommand {
             }
         }
 
-        int ping = targetPlayer.getPing();
+        int ping;
+        try {
+            ping = PingUtil.getPing(targetPlayer);
+        } catch (CommandException e) {
+            //if error
+            Throwable cause = e.getCause();
+            if (cause == null) {
+                //missing ping query method
+                MessagingUtil.genericError(commandSender, e.getMessage());
+            } else {
+                //error while querying ping
+                MessagingUtil.genericError(commandSender, String.format("%s: %s", e.getMessage(), cause));
+            }
+            return true;
+        }
         if (targetEqualsSender) {
             MessagingUtil.notifyTargetPlayer(targetPlayer, "A wizard responded within " + ping + " ms");
         } else {

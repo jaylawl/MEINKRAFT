@@ -21,10 +21,6 @@ import java.util.List;
 
 public class CommandNightVision implements MeinkraftCommand {
 
-    public static final String PERMISSION_NODE = "mk.nightvision";
-    public static final String PERMISSION_NODE_SELF = "mk.nightvision.self";
-    public static final String PERMISSION_NODE_OTHERS = "mk.nightvision.others";
-
     public final static short MAX_VANILLA_POTION_DURATION = 9600; // 8 minutes * 60 seconds * 20 game ticks = 9600 | 8 minutes is the maximum duration a vanilla potion may have
     private final static PotionEffect PERMANENT_NIGHT_VISION = new PotionEffect(
             PotionEffectType.NIGHT_VISION,
@@ -42,7 +38,7 @@ public class CommandNightVision implements MeinkraftCommand {
 
     @Override
     public @NotNull String getBasePermissionNode() {
-        return PERMISSION_NODE;
+        return "mk.nightvision";
     }
 
     @Override
@@ -55,11 +51,13 @@ public class CommandNightVision implements MeinkraftCommand {
         return Collections.singletonList(new NightVisionListener());
     }
 
+    //
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+        final boolean permissionSelf = hasSelfPermission(commandSender);
+        final boolean permissionOthers = hasOthersPermission(commandSender);
 
         if (!permissionSelf && !permissionOthers) {
             return Collections.emptyList();
@@ -88,8 +86,8 @@ public class CommandNightVision implements MeinkraftCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+        final boolean permissionSelf = hasSelfPermission(commandSender);
+        final boolean permissionOthers = hasOthersPermission(commandSender);
 
         if (!permissionSelf && !permissionOthers) {
             MessagingUtil.noPermission(commandSender);

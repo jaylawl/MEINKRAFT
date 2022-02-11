@@ -17,11 +17,14 @@ import java.util.List;
 
 public class CommandInventorySpy implements MeinkraftCommand {
 
-    public static final String PERMISSION_NODE = "mk.inventoryspy";
-    public static final String PERMISSION_NODE_SELF = "mk.inventoryspy.self";
-    public static final String PERMISSION_NODE_OTHERS = "mk.inventoryspy.others";
-
     public CommandInventorySpy() {
+    }
+
+    //
+
+    @Override
+    public @NotNull String getBasePermissionNode() {
+        return "mk.inventoryspy";
     }
 
     //
@@ -29,8 +32,8 @@ public class CommandInventorySpy implements MeinkraftCommand {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+        final boolean permissionSelf = hasSelfPermission(commandSender);
+        final boolean permissionOthers = hasOthersPermission(commandSender);
 
         if (!permissionSelf && !permissionOthers) {
             return Collections.emptyList();
@@ -61,8 +64,8 @@ public class CommandInventorySpy implements MeinkraftCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+        final boolean permissionSelf = hasSelfPermission(commandSender);
+        final boolean permissionOthers = hasOthersPermission(commandSender);
 
         if (!permissionSelf && !permissionOthers) {
             MessagingUtil.noPermission(commandSender);
@@ -114,11 +117,6 @@ public class CommandInventorySpy implements MeinkraftCommand {
         }
 
         return true;
-    }
-
-    @Override
-    public @NotNull String getBasePermissionNode() {
-        return PERMISSION_NODE;
     }
 
 }

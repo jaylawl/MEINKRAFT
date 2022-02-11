@@ -16,15 +16,24 @@ import java.util.List;
 
 public class CommandMaster implements MeinkraftCommand {
 
-    public static final String PERMISSION_NODE = "mk.admin";
-
     public CommandMaster() {
     }
 
     //
 
     @Override
+    public @NotNull String getBasePermissionNode() {
+        return "mk.admin";
+    }
+
+    //
+
+    @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+
+        if (!commandSender.hasPermission(getBasePermissionNode())) {
+            return Collections.emptyList();
+        }
 
         int argumentNumber = TabHelper.getArgumentNumber(arguments);
 
@@ -43,6 +52,11 @@ public class CommandMaster implements MeinkraftCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+
+        if (!commandSender.hasPermission(getBasePermissionNode())) {
+            MessagingUtil.noPermission(commandSender);
+            return true;
+        }
 
         switch (arguments.length > 0 ? arguments[0].toLowerCase() : "") {
 
@@ -65,11 +79,6 @@ public class CommandMaster implements MeinkraftCommand {
         }
 
         return true;
-    }
-
-    @Override
-    public @NotNull String getBasePermissionNode() {
-        return PERMISSION_NODE;
     }
 
 }

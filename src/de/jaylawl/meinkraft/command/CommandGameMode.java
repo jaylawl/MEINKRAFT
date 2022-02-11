@@ -19,11 +19,14 @@ import java.util.List;
 
 public class CommandGameMode implements MeinkraftCommand {
 
-    public static final String PERMISSION_NODE = "mk.gamemode";
-    public static final String PERMISSION_NODE_SELF = "mk.gamemode.self";
-    public static final String PERMISSION_NODE_OTHERS = "mk.gamemode.others";
-
     public CommandGameMode() {
+    }
+
+    //
+
+    @Override
+    public @NotNull String getBasePermissionNode() {
+        return "mk.gamemode";
     }
 
     //
@@ -31,8 +34,8 @@ public class CommandGameMode implements MeinkraftCommand {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+        final boolean permissionSelf = hasSelfPermission(commandSender);
+        final boolean permissionOthers = hasOthersPermission(commandSender);
 
         if (!permissionSelf && !permissionOthers) {
             return Collections.emptyList();
@@ -68,8 +71,8 @@ public class CommandGameMode implements MeinkraftCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
-        boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
-        boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
+        final boolean permissionSelf = hasSelfPermission(commandSender);
+        final boolean permissionOthers = hasOthersPermission(commandSender);
 
         if (!permissionSelf && !permissionOthers) {
             MessagingUtil.noPermission(commandSender);
@@ -145,11 +148,6 @@ public class CommandGameMode implements MeinkraftCommand {
         }
 
         return true;
-    }
-
-    @Override
-    public @NotNull String getBasePermissionNode() {
-        return PERMISSION_NODE;
     }
 
 }

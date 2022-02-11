@@ -20,15 +20,24 @@ import java.util.List;
 
 public class CommandQuery implements MeinkraftCommand {
 
-    public static final String PERMISSION_NODE = "mk.query";
-
     public CommandQuery() {
     }
 
     //
 
     @Override
+    public @NotNull String getBasePermissionNode() {
+        return "mk.query";
+    }
+
+    //
+
+    @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+
+        if (!hasBasePermission(commandSender)) {
+            return Collections.emptyList();
+        }
 
         List<String> completions = new ArrayList<>();
         int argumentNumber = TabHelper.getArgumentNumber(arguments);
@@ -68,6 +77,11 @@ public class CommandQuery implements MeinkraftCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+
+        if (!hasBasePermission(commandSender)) {
+            MessagingUtil.noPermission(commandSender);
+            return true;
+        }
 
         if (arguments.length == 0) {
             commandSender.sendMessage(ChatColor.GREEN + "/query" + ChatColor.RED + " <player>" + ChatColor.GRAY + " <query>");
@@ -155,11 +169,6 @@ public class CommandQuery implements MeinkraftCommand {
         commandSender.sendMessage("Player: " + targetPlayer.getName() + ", Query: \"" + queryArgument + "\", Result: " + result);
 
         return true;
-    }
-
-    @Override
-    public @NotNull String getBasePermissionNode() {
-        return PERMISSION_NODE;
     }
 
 }

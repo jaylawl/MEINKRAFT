@@ -22,8 +22,6 @@ import java.util.List;
 
 public class CommandStatistic implements MeinkraftCommand {
 
-    public static final String PERMISSION_NODE = "mk.statistic";
-
     private final List<String> statisticStrings = new ArrayList<>();
     private final HashMap<Statistic.Type, List<String>> subStatisticStrings = new HashMap<>();
 
@@ -54,7 +52,18 @@ public class CommandStatistic implements MeinkraftCommand {
     //
 
     @Override
+    public @NotNull String getBasePermissionNode() {
+        return "mk.statistic";
+    }
+
+    //
+
+    @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+
+        if (!hasBasePermission(commandSender)) {
+            return Collections.emptyList();
+        }
 
         List<String> completions = new ArrayList<>();
         int argumentNumber = TabHelper.getArgumentNumber(arguments);
@@ -90,6 +99,11 @@ public class CommandStatistic implements MeinkraftCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+
+        if (!hasBasePermission(commandSender)) {
+            MessagingUtil.noPermission(commandSender);
+            return true;
+        }
 
         OfflinePlayer offlineAffectedPlayer;
         Statistic statistic;
@@ -195,11 +209,6 @@ public class CommandStatistic implements MeinkraftCommand {
         }
 
         return true;
-    }
-
-    @Override
-    public @NotNull String getBasePermissionNode() {
-        return PERMISSION_NODE;
     }
 
 }

@@ -17,15 +17,27 @@ public interface MeinkraftCommand extends CommandExecutor, TabCompleter {
 
     //
 
-    default @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
-        return Collections.emptyList();
-    }
-
-    default boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
-        return false;
-    }
-
     @NotNull String getBasePermissionNode();
+
+    default @NotNull String getSelfPermissionNode() {
+        return getBasePermissionNode() + ".self";
+    }
+
+    default @NotNull String getOthersPermissionNode() {
+        return getBasePermissionNode() + ".others";
+    }
+
+    default boolean hasBasePermission(@NotNull CommandSender commandSender) {
+        return commandSender.hasPermission(getBasePermissionNode());
+    }
+
+    default boolean hasSelfPermission(@NotNull CommandSender commandSender) {
+        return commandSender.hasPermission(getSelfPermissionNode());
+    }
+
+    default boolean hasOthersPermission(@NotNull CommandSender commandSender) {
+        return commandSender.hasPermission(getOthersPermissionNode());
+    }
 
     default @NotNull String getNoPermissionMessage() {
         return MessagingUtil.NO_PERMISSION_MESSAGE;
@@ -37,6 +49,16 @@ public interface MeinkraftCommand extends CommandExecutor, TabCompleter {
 
     default @NotNull Collection<Listener> getRequiredListenerClasses() {
         return Collections.emptyList();
+    }
+
+    //
+
+    default @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+        return Collections.emptyList();
+    }
+
+    default boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
+        return false;
     }
 
 }

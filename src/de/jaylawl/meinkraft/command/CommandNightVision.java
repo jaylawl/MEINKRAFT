@@ -1,21 +1,23 @@
 package de.jaylawl.meinkraft.command;
 
+import de.jaylawl.meinkraft.command.util.TabCompleteUtil;
+import de.jaylawl.meinkraft.command.util.TabHelper;
+import de.jaylawl.meinkraft.listener.bukkit.NightVisionListener;
 import de.jaylawl.meinkraft.util.MessagingUtil;
-import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandNightVision implements MeinkraftCommand {
 
@@ -23,21 +25,35 @@ public class CommandNightVision implements MeinkraftCommand {
     public static final String PERMISSION_NODE_SELF = "mk.nightvision.self";
     public static final String PERMISSION_NODE_OTHERS = "mk.nightvision.others";
 
-    private final static short CUSTOM_EFFECT_IDENTIFIER = 214;
+    public final static short MAX_VANILLA_POTION_DURATION = 9600; // 8 minutes * 60 seconds * 20 game ticks = 9600 | 8 minutes is the maximum duration a vanilla potion may have
     private final static PotionEffect PERMANENT_NIGHT_VISION = new PotionEffect(
             PotionEffectType.NIGHT_VISION,
-            2147483647,
-            CUSTOM_EFFECT_IDENTIFIER,
+            Integer.MAX_VALUE,
+            0,
             true,
             false,
             true
     );
-    private final ConcurrentHashMap<UUID, PotionEffect> priorNightVisionEffects = new ConcurrentHashMap<>();
 
     public CommandNightVision() {
     }
 
     //
+
+    @Override
+    public @NotNull String getBasePermissionNode() {
+        return PERMISSION_NODE;
+    }
+
+    @Override
+    public boolean requiresListeners() {
+        return true;
+    }
+
+    @Override
+    public @NotNull Collection<Listener> getRequiredListenerClasses() {
+        return Collections.singletonList(new NightVisionListener());
+    }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
@@ -71,8 +87,6 @@ public class CommandNightVision implements MeinkraftCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
-
-        // TODO: 14.10.2021 probably broken in 1.17?
 
         boolean permissionSelf = commandSender.hasPermission(PERMISSION_NODE_SELF);
         boolean permissionOthers = commandSender.hasPermission(PERMISSION_NODE_OTHERS);
@@ -114,26 +128,20 @@ public class CommandNightVision implements MeinkraftCommand {
 
         //
 
-        boolean hasPermanentNightVision = false;
-        if (targetPlayer.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-            PotionEffect priorNightVisionEffect = targetPlayer.getPotionEffect(PotionEffectType.NIGHT_VISION);
-            if (priorNightVisionEffect != null) {
-                if (priorNightVisionEffect.getAmplifier() == CUSTOM_EFFECT_IDENTIFIER) {
-                    hasPermanentNightVision = true;
-                } else {
-                    this.priorNightVisionEffects.put(targetPlayer.getUniqueId(), priorNightVisionEffect);
+        boolean applyEffect = false;
+        if (!targetPlayer.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+            applyEffect = true;
+        } else {
+            PotionEffect currentNightVisionEffect = targetPlayer.getPotionEffect(PotionEffectType.NIGHT_VISION);
+            if (currentNightVisionEffect != null) {
+                if (currentNightVisionEffect.getDuration() <= MAX_VANILLA_POTION_DURATION) {
+                    applyEffect = true;
                 }
             }
         }
 
-        if (hasPermanentNightVision) {
+        if (!applyEffect) {
             targetPlayer.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            UUID affectedPlayerUniqueId = targetPlayer.getUniqueId();
-            PotionEffect priorNightVisionEffect = this.priorNightVisionEffects.get(affectedPlayerUniqueId);
-            if (priorNightVisionEffect != null) {
-                targetPlayer.addPotionEffect(priorNightVisionEffect);
-                this.priorNightVisionEffects.remove(affectedPlayerUniqueId);
-            }
             commandSender.sendMessage("Removed \"permanent\" night vision from " + targetPlayer.getName());
             if (!targetEqualsSender) {
                 MessagingUtil.notifyTargetPlayer(targetPlayer, "A wizard has cast away your permanent night vision ability");
@@ -148,4 +156,5 @@ public class CommandNightVision implements MeinkraftCommand {
 
         return true;
     }
+
 }

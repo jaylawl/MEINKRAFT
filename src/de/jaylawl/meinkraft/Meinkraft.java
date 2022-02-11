@@ -1,7 +1,8 @@
 package de.jaylawl.meinkraft;
 
-import de.jaylawl.meinkraft.command.*;
-import de.jaylawl.meinkraft.listener.bukkit.GodModeListener;
+import de.jaylawl.meinkraft.command.CommandIndex;
+import de.jaylawl.meinkraft.command.CommandMaster;
+import de.jaylawl.meinkraft.command.MeinkraftCommand;
 import de.jaylawl.meinkraft.settings.FileUtil;
 import de.jaylawl.meinkraft.settings.Settings;
 import de.jaylawl.meinkraft.util.DataCenter;
@@ -9,10 +10,14 @@ import de.jaylawl.meinkraft.util.MessagingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public class Meinkraft extends JavaPlugin {
@@ -44,175 +49,46 @@ public class Meinkraft extends JavaPlugin {
 
         //
 
-        if (this.settings.getEnableCommand(CommandFly.class)) {
-            PluginCommand flyCommand = getCommand("fly");
-            if (flyCommand != null) {
-                flyCommand.setPermission(CommandFly.PERMISSION_NODE);
-                flyCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandFly commandFly = new CommandFly();
-                flyCommand.setTabCompleter(commandFly);
-                flyCommand.setExecutor(commandFly);
-                this.enabledCommands++;
-                logger.info("Enabled \"fly\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"fly\" command");
-        }
+        for (CommandIndex ci : CommandIndex.values()) {
 
-        if (this.settings.getEnableCommand(CommandGameMode.class)) {
-            PluginCommand gamemodeCommand = getCommand("gm");
-            if (gamemodeCommand != null) {
-                gamemodeCommand.setPermission(CommandGameMode.PERMISSION_NODE);
-                gamemodeCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandGameMode commandGameMode = new CommandGameMode();
-                gamemodeCommand.setExecutor(commandGameMode);
-                gamemodeCommand.setTabCompleter(commandGameMode);
-                this.enabledCommands++;
-                logger.info("Enabled \"gm\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"gm\" command");
-        }
+            String commandLabel = ci.getCommandLabel();
+            PluginCommand pluginCommand = getCommand(commandLabel);
+            if (pluginCommand == null) {
+                logger.severe("Skipped enabling command \"" + commandLabel + "\"; (PluginCommand was null)");
+            } else {
+                if (!this.settings.isCommandEnabled(ci.getClazz())) {
+                    logger.info("Skipped enabling command \"" + commandLabel + "\"; (deactivated in settings file)");
+                } else {
+                    MeinkraftCommand commandInstance;
+                    try {
+                        commandInstance = ci.getClazz().getDeclaredConstructor().newInstance();
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException exception) {
+                        logger.warning("An exception occurred while trying to instantiate command of type \"" + ci + "\":");
+                        exception.printStackTrace();
+                        continue;
+                    }
+                    pluginCommand.setPermission(commandInstance.getBasePermissionNode());
+                    pluginCommand.setPermissionMessage(commandInstance.getNoPermissionMessage());
+                    pluginCommand.setTabCompleter(commandInstance);
+                    pluginCommand.setExecutor(commandInstance);
 
-        if (this.settings.getEnableCommand(CommandGodMode.class)) {
-            PluginCommand godModeCommand = getCommand("godmode");
-            if (godModeCommand != null) {
-                godModeCommand.setPermission(CommandGodMode.PERMISSION_NODE);
-                godModeCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandGodMode commandGodMode = new CommandGodMode();
-                godModeCommand.setTabCompleter(commandGodMode);
-                godModeCommand.setExecutor(commandGodMode);
-                pluginManager.registerEvents(new GodModeListener(), this);
-                this.enabledListeners += 2; // TODO: 13.10.2021 programmatically get the amount of added listeners in the class
-                this.enabledCommands++;
-                logger.info("Enabled \"godmode\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"godmode\" command");
-        }
+                    if (commandInstance.requiresListeners()) {
+                        for (Listener listener : commandInstance.getRequiredListenerClasses()) {
+                            pluginManager.registerEvents(listener, this);
+                            for (Method method : listener.getClass().getMethods()) {
+                                if (method.isAnnotationPresent(EventHandler.class)) {
+                                    this.enabledListeners++;
+                                }
+                            }
+                        }
+                    }
 
-        if (this.settings.getEnableCommand(CommandHeal.class)) {
-            PluginCommand healCommand = getCommand("heal");
-            if (healCommand != null) {
-                healCommand.setPermission(CommandHeal.PERMISSION_NODE);
-                healCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandHeal commandHeal = new CommandHeal();
-                healCommand.setTabCompleter(commandHeal);
-                healCommand.setExecutor(commandHeal);
-                this.enabledCommands++;
-                logger.info("Enabled \"heal\" command");
+                    this.enabledCommands++;
+                    logger.info("Enabled \"" + commandLabel + "\" command");
+                }
             }
-        } else {
-            logger.info("Skipped enabling \"heal\" command");
-        }
 
-        if (this.settings.getEnableCommand(CommandInventorySpy.class)) {
-            PluginCommand inventorySpyCommand = getCommand("inventoryspy");
-            if (inventorySpyCommand != null) {
-                inventorySpyCommand.setPermission(CommandInventorySpy.PERMISSION_NODE);
-                inventorySpyCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandInventorySpy commandInventorySpy = new CommandInventorySpy();
-                inventorySpyCommand.setExecutor(commandInventorySpy);
-                inventorySpyCommand.setTabCompleter(commandInventorySpy);
-                this.enabledCommands++;
-                logger.info("Enabled \"inventoryspy\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"inventoryspy\" command");
         }
-
-        if (this.settings.getEnableCommand(CommandPing.class)) {
-            PluginCommand pingCommand = getCommand("ping");
-            if (pingCommand != null) {
-                pingCommand.setPermission(CommandPing.PERMISSION_NODE);
-                pingCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandPing commandPing = new CommandPing();
-                pingCommand.setTabCompleter(commandPing);
-                pingCommand.setExecutor(commandPing);
-                this.enabledCommands++;
-                logger.info("Enabled \"ping\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"ping\" command");
-        }
-
-        if (this.settings.getEnableCommand(CommandNightVision.class)) {
-            PluginCommand nightvisionCommand = getCommand("nightvision");
-            if (nightvisionCommand != null) {
-                nightvisionCommand.setPermission(CommandNightVision.PERMISSION_NODE);
-                nightvisionCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandNightVision commandNightVision = new CommandNightVision();
-                nightvisionCommand.setTabCompleter(commandNightVision);
-                nightvisionCommand.setExecutor(commandNightVision);
-                this.enabledCommands++;
-                logger.info("Enabled \"nightvision\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"nightvision\" command");
-        }
-
-        if (this.settings.getEnableCommand(CommandQuery.class)) {
-            PluginCommand queryCommand = getCommand("query");
-            if (queryCommand != null) {
-                queryCommand.setPermission(CommandQuery.PERMISSION_NODE);
-                queryCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandQuery commandQuery = new CommandQuery();
-                queryCommand.setExecutor(commandQuery);
-                queryCommand.setTabCompleter(commandQuery);
-                this.enabledCommands++;
-                logger.info("Enabled \"query\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"query\" command");
-        }
-
-        if (this.settings.getEnableCommand(CommandSpeed.class)) {
-            PluginCommand speedCommand = getCommand("speed");
-            if (speedCommand != null) {
-                speedCommand.setPermission(CommandSpeed.PERMISSION_NODE);
-                speedCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandSpeed cmdSpeed = new CommandSpeed();
-                speedCommand.setExecutor(cmdSpeed);
-                speedCommand.setTabCompleter(cmdSpeed);
-                this.enabledCommands++;
-                logger.info("Enabled \"speed\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"speed\" command");
-        }
-
-        if (this.settings.getEnableCommand(CommandStatistic.class)) {
-            PluginCommand statisticCommand = getCommand("statistic");
-            if (statisticCommand != null) {
-                statisticCommand.setPermission(CommandStatistic.PERMISSION_NODE);
-                statisticCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandStatistic cmdStatistic = new CommandStatistic();
-                statisticCommand.setExecutor(cmdStatistic);
-                statisticCommand.setTabCompleter(cmdStatistic);
-                this.enabledCommands++;
-                logger.info("Enabled \"statistic\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"statistic\" command");
-        }
-
-        if (this.settings.getEnableCommand(CommandWorld.class)) {
-            PluginCommand worldCommand = getCommand("world");
-            if (worldCommand != null) {
-                worldCommand.setPermission(CommandWorld.PERMISSION_NODE);
-                worldCommand.setPermissionMessage(MessagingUtil.NO_PERMISSION_MESSAGE);
-                CommandWorld commandWorld = new CommandWorld();
-                worldCommand.setExecutor(commandWorld);
-                worldCommand.setTabCompleter(commandWorld);
-                this.enabledCommands++;
-                logger.info("Enabled \"world\" command");
-            }
-        } else {
-            logger.info("Skipped enabling \"world\" command");
-        }
-
-        logger.info("Enabled " + this.enabledCommands + " command(s)");
-        logger.info("Enabled " + this.enabledListeners + " listener(s)");
 
         PluginCommand masterCommand = getCommand("meinkraft");
         if (masterCommand != null) {
@@ -221,10 +97,14 @@ public class Meinkraft extends JavaPlugin {
             CommandMaster commandMaster = new CommandMaster();
             masterCommand.setTabCompleter(commandMaster);
             masterCommand.setExecutor(commandMaster);
+            this.enabledCommands++;
         } else {
             logger.severe("Failed to enable the master command; disabling plugin...");
             pluginManager.disablePlugin(this);
         }
+
+        logger.info("Enabled " + this.enabledCommands + " command(s)");
+        logger.info("Enabled " + this.enabledListeners + " listener(s)");
 
     }
 

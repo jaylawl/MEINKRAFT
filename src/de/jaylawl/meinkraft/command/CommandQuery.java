@@ -1,8 +1,9 @@
 package de.jaylawl.meinkraft.command;
 
 import de.jaylawl.meinkraft.Meinkraft;
+import de.jaylawl.meinkraft.command.util.TabCompleteUtil;
+import de.jaylawl.meinkraft.command.util.TabHelper;
 import de.jaylawl.meinkraft.util.MessagingUtil;
-import de.jaylawl.meinkraft.util.TabHelper;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -155,4 +156,10 @@ public class CommandQuery implements MeinkraftCommand {
 
         return true;
     }
+
+    @Override
+    public @NotNull String getBasePermissionNode() {
+        return PERMISSION_NODE;
+    }
+
 }

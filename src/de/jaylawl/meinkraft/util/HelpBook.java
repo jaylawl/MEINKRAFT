@@ -10,16 +10,21 @@ import org.bukkit.inventory.meta.BookMeta;
 
 public class HelpBook {
 
+    private HelpBook() {
+    }
+
+    //
+
     public static ItemStack make() {
 
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-        BookMeta b = ((BookMeta) book.getItemMeta());
+        BookMeta bookMeta = (BookMeta) book.getItemMeta();
 
-        b.setGeneration(BookMeta.Generation.ORIGINAL);
-        b.setAuthor("jaylawl");
-        b.setTitle("MEINKRAFT ingame manual");
+        bookMeta.setGeneration(BookMeta.Generation.ORIGINAL);
+        bookMeta.setAuthor("jaylawl");
+        bookMeta.setTitle("MEINKRAFT ingame manual");
 
-        b.spigot().addPage(
+        bookMeta.spigot().addPage(
                 new ComponentBuilder("")
                         .append(MessagingUtil.getPluginColor() + "§lMEINKRAFT§r\n" +
                                 "§8version " + Meinkraft.getInstance().getDescription().getVersion() + "\n" +
@@ -34,12 +39,7 @@ public class HelpBook {
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("(De-)activating commands and/or\nmodules requires a server restart").create()))
                         .append("\n").reset()
                         .append("  Commands: " + Meinkraft.getEnabledCommands() + "\n" +
-                                "  Modules: 0" + "\n" +
                                 "  Listeners: " + Meinkraft.getEnabledListeners() + "\n\n")
-                        .append("§8§l>§r §9Donate via PayPal§r\n")
-                        .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://paypal.me/langejulian"))
-                        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click here to donate to the developers\nOpens your browser to paypal.me").create()))
-                        .append("").reset()
                         .append("§8§l>§r §6Rate on Spigot§r\n")
                         .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/meinkraft.74914/"))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click here to rate the plugin\nOpens your browser to spigotmc.org").create()))
@@ -51,7 +51,7 @@ public class HelpBook {
                         .create()
         );
 
-        b.addPage(
+        bookMeta.addPage(
                 "§lColor code chart§r\n\n" +
                         "&0 §0BLACK§r | &1 §1BLUE§r\n" +
                         "&2 §2GREEN§r | &3 §3CYAN§r\n" +
@@ -66,7 +66,7 @@ public class HelpBook {
                         "&o §oITALIC§r | &r RESET\n"
         );
 
-        book.setItemMeta(b);
+        book.setItemMeta(bookMeta);
 
         return book;
     }

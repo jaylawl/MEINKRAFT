@@ -1,16 +1,20 @@
 package de.jaylawl.meinkraft.command;
 
 import de.jaylawl.meinkraft.Meinkraft;
+import de.jaylawl.meinkraft.command.util.TabCompleteUtil;
+import de.jaylawl.meinkraft.command.util.TabHelper;
+import de.jaylawl.meinkraft.listener.bukkit.GodModeListener;
 import de.jaylawl.meinkraft.util.MessagingUtil;
-import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -98,6 +102,21 @@ public class CommandGodMode implements MeinkraftCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public @NotNull String getBasePermissionNode() {
+        return PERMISSION_NODE;
+    }
+
+    @Override
+    public boolean requiresListeners() {
+        return true;
+    }
+
+    @Override
+    public @NotNull Collection<Listener> getRequiredListenerClasses() {
+        return Collections.singletonList(new GodModeListener());
     }
 
 }

@@ -1,4 +1,4 @@
-package de.jaylawl.meinkraft.util;
+package de.jaylawl.meinkraft.command.util;
 
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;

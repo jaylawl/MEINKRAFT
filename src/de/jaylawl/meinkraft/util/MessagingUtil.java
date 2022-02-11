@@ -11,11 +11,15 @@ public class MessagingUtil {
     private final static String PLUGIN_TAG = "§7[" + PLUGIN_COLOR + "MK§7]§r";
 
     public static final String NO_PERMISSION_MESSAGE = (ChatColor.RED + "Insufficient permission");
-    
+
+    private MessagingUtil() {
+    }
+
     //
 
     public static void noPermission(@NotNull CommandSender sender) {
         sender.sendMessage(ChatColor.RED + "Insufficient permission");
+//        sender.sendMessage(Component.text("Insufficient permission").color(NamedTextColor.RED), MessageType.SYSTEM);
     }
 
     public static void noPermissionOthers(@NotNull CommandSender sender) {

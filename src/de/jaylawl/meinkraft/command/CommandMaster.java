@@ -1,9 +1,9 @@
 package de.jaylawl.meinkraft.command;
 
 import de.jaylawl.meinkraft.Meinkraft;
+import de.jaylawl.meinkraft.command.util.TabHelper;
 import de.jaylawl.meinkraft.util.HelpBook;
 import de.jaylawl.meinkraft.util.MessagingUtil;
-import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -65,6 +65,11 @@ public class CommandMaster implements MeinkraftCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public @NotNull String getBasePermissionNode() {
+        return PERMISSION_NODE;
     }
 
 }

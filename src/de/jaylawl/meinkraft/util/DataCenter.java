@@ -2,12 +2,12 @@ package de.jaylawl.meinkraft.util;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public class DataCenter {
 
-    private final HashSet<UUID> playersInGodMode = new HashSet<>();
+    private final LinkedList<UUID> playersInGodMode = new LinkedList<>();
 
     public DataCenter() {
     }

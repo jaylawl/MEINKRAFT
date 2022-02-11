@@ -1,4 +1,4 @@
-package de.jaylawl.meinkraft.command;
+package de.jaylawl.meinkraft.command.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;

@@ -1,7 +1,7 @@
 package de.jaylawl.meinkraft.settings;
 
 import de.jaylawl.meinkraft.Meinkraft;
-import de.jaylawl.meinkraft.command.CmdOptionalType;
+import de.jaylawl.meinkraft.command.CommandIndex;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -68,32 +68,9 @@ public class FileUtil {
     public static void fillDefaultValues(@NotNull YamlConfiguration config) {
         HashMap<String, Object> requiredValues = new HashMap<>();
 
-        for (CmdOptionalType optionalType : CmdOptionalType.values()) {
-            requiredValues.put("Commands." + optionalType.getCommandLabel(), true);
+        for (CommandIndex ci : CommandIndex.values()) {
+            requiredValues.put("Commands." + ci.getCommandLabel(), true);
         }
-
-        requiredValues.put("Modules.CommandBlocker.Enabled", CommandBlocker.DEFAULT_ENABLED);
-        requiredValues.put("Modules.CommandBlocker.SendFeedback", CommandBlocker.DEFAULT_SEND_FEEDBACK);
-        requiredValues.put("Modules.CommandBlocker.BlockedCommands", CommandBlocker.DEFAULT_BLOCKED_COMMANDS);
-
-        requiredValues.put("Modules.UnsafePlayerBlocker.Enabled", UnsafePlayerBlocker.DEFAULT_ENABLED);
-        requiredValues.put("Modules.UnsafePlayerBlocker.UnsafeCharacters.Block", UnsafePlayerBlocker.DEFAULT_UNSAFE_CHARACTERS_BLOCK);
-        requiredValues.put("Modules.UnsafePlayerBlocker.UnsafeCharacters.KickMessage", UnsafePlayerBlocker.DEFAULT_UNSAFE_CHARACTERS_KICK_MESSAGE);
-        requiredValues.put("Modules.UnsafePlayerBlocker.DuplicateUsernames.Block", UnsafePlayerBlocker.DEFAULT_DUPLICATE_USERNAMES_BLOCK);
-        requiredValues.put("Modules.UnsafePlayerBlocker.DuplicateUsernames.KickMessage", UnsafePlayerBlocker.DEFAULT_DUPLICATE_USERNAMES_KICK_MESSAGE);
-        requiredValues.put("Modules.UnsafePlayerBlocker.ContainingKeywords.Block", UnsafePlayerBlocker.DEFAULT_CONTAINING_KEYWORDS_BLOCK);
-        requiredValues.put("Modules.UnsafePlayerBlocker.ContainingKeywords.Keywords", UnsafePlayerBlocker.DEFAULT_BANNED_KEYWORDS);
-        requiredValues.put("Modules.UnsafePlayerBlocker.ContainingKeywords.KickMessage", UnsafePlayerBlocker.DEFAULT_CONTAINING_KEYWORDS_KICK_MESSAGE);
-
-        requiredValues.put("Modules.ResourcePackHandler.Enabled", ResourcePackHandler.DEFAULT_ENABLED);
-        requiredValues.put("Modules.ResourcePackHandler.Link", ResourcePackHandler.DEFAULT_LINK);
-        requiredValues.put("Modules.ResourcePackHandler.Hash", ResourcePackHandler.DEFAULT_HASH);
-        requiredValues.put("Modules.ResourcePackHandler.KickOnDecline", ResourcePackHandler.DEFAULT_KICK_ON_DECLINE);
-        requiredValues.put("Modules.ResourcePackHandler.KickOnFailure", ResourcePackHandler.DEFAULT_KICK_ON_FAILURE);
-        requiredValues.put("Modules.ResourcePackHandler.TicksBeforeKick", ResourcePackHandler.DEFAULT_TICKS_BEFORE_KICK);
-        requiredValues.put("Modules.ResourcePackHandler.IgnoreOperators", ResourcePackHandler.DEFAULT_IGNORE_OPERATORS);
-        requiredValues.put("Modules.ResourcePackHandler.IgnoredUUIDs", ResourcePackHandler.DEFAULT_IGNORED_UUIDS);
-        requiredValues.put("Modules.ResourcePackHandler.KickMessage", ResourcePackHandler.DEFAULT_KICK_MESSAGE_STRINGS);
 
         for (String node : requiredValues.keySet()) {
             if (config.get(node) == null) {

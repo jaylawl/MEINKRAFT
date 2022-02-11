@@ -1,7 +1,8 @@
 package de.jaylawl.meinkraft.command;
 
+import de.jaylawl.meinkraft.command.util.TabCompleteUtil;
+import de.jaylawl.meinkraft.command.util.TabHelper;
 import de.jaylawl.meinkraft.util.MessagingUtil;
-import de.jaylawl.meinkraft.util.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -105,5 +106,9 @@ public class CommandHeal implements MeinkraftCommand {
         return true;
     }
 
+    @Override
+    public @NotNull String getBasePermissionNode() {
+        return PERMISSION_NODE;
+    }
 
 }

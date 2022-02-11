@@ -2,7 +2,7 @@ package de.jaylawl.meinkraft.command;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum CmdOptionalType {
+public enum CommandIndex {
 
     FLY(CommandFly.class, "fly"),
     GAMEMODE(CommandGameMode.class, "gm"),
@@ -19,7 +19,7 @@ public enum CmdOptionalType {
     private final Class<? extends MeinkraftCommand> clazz;
     private final String commandLabel;
 
-    CmdOptionalType(@NotNull Class<? extends MeinkraftCommand> clazz, @NotNull String commandLabel) {
+    CommandIndex(@NotNull Class<? extends MeinkraftCommand> clazz, @NotNull String commandLabel) {
         this.clazz = clazz;
         this.commandLabel = commandLabel;
     }
